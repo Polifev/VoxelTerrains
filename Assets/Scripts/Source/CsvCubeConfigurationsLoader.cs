@@ -34,7 +34,7 @@ namespace VoxelTerrains
 
                             for (int j = 0; j < config.Triangles.Length; j++)
                             {
-                                config.Triangles[j] = int.Parse(vectorStrings[j]);
+                                config.Triangles[j] = int.Parse(triangleStrings[j]);
                             }
                         }
                         else
