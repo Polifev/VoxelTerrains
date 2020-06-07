@@ -42,6 +42,7 @@ namespace VoxelTerrains
                             config.Vertices = new Vector3[0];
                             config.Triangles = new int[0];
                         }
+                        result[i] = config;
                     } 
                     catch(EndOfStreamException e)
                     {
@@ -56,6 +57,7 @@ namespace VoxelTerrains
         {
             vectorString = vectorString.Replace("(", "");
             vectorString = vectorString.Replace(")", "");
+            vectorString = vectorString.Replace(".", ",");
             var coordinateStrings = vectorString.Split(':');
 
             return new Vector3(
