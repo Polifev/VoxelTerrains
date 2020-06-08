@@ -44,7 +44,7 @@ namespace VoxelTerrains.ScriptableObjects
                         }
                         result[i] = config;
                     } 
-                    catch(EndOfStreamException e)
+                    catch(EndOfStreamException)
                     {
                         throw new Exception("The file does not contain all the cases");
                     }
