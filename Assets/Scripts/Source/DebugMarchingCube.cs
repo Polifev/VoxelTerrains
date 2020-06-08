@@ -1,63 +1,62 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VoxelTerrains.ScriptableObjects;
 
 namespace VoxelTerrains
 {
     [ExecuteInEditMode]
     public class DebugMarchingCube : MonoBehaviour
     {
+        [SerializeField]
+        private CubeConfigurations _configurations = null;
         [SerializeField, Range(0, 255)]
         private int _caseIndex = 0;
 
         private Mesh _currentMesh;
+        private Mesh _invertedMesh;
 
         private void Start()
         {
-            var configuration = VoxelManager.Instance.Configuration(_caseIndex);
-            _currentMesh = new Mesh();
-            _currentMesh.vertices = configuration.Vertices;
-            _currentMesh.triangles = configuration.Triangles;
-            _currentMesh.RecalculateNormals();
+            
         }
 
         // Start is called before the first frame update
         void OnValidate()
         {
-            var configuration = VoxelManager.Instance.Configuration(_caseIndex);
+            if (_configurations == null)
+                return;
+
+            var configuration = _configurations.Configurations[_caseIndex];
             _currentMesh = new Mesh();
+            _invertedMesh = new Mesh();
+
             _currentMesh.vertices = configuration.Vertices;
             _currentMesh.triangles = configuration.Triangles;
             _currentMesh.RecalculateNormals();
+
+            
+            _invertedMesh.vertices = _currentMesh.vertices;
+            var invertedTriangles = new int[_currentMesh.triangles.Length];
+            for (int i = 0; i < _currentMesh.triangles.Length; i += 3)
+            {
+                invertedTriangles[i] = _currentMesh.triangles[i];
+                invertedTriangles[i + 1] = _currentMesh.triangles[i + 2];
+                invertedTriangles[i + 2] = _currentMesh.triangles[i + 1];
+            }
+            _invertedMesh.triangles = invertedTriangles;
+            _invertedMesh.RecalculateNormals();
         }
 
         private void OnDrawGizmos()
         {
+            // Draw meshes
             if (_currentMesh.vertices.Length > 0)
             {
-                Mesh copy = new Mesh();
-
-                var vertices = new Vector3[_currentMesh.vertices.Length];
-                for(int i = 0; i < _currentMesh.vertices.Length; i++)
-                {
-                    vertices[i] = _currentMesh.vertices[i];
-                }
-                copy.vertices = vertices;
-
-                var triangles = new int[_currentMesh.triangles.Length];
-                for(int i = 0; i < _currentMesh.triangles.Length; i += 3)
-                {
-                    triangles[i] = _currentMesh.triangles[i];
-                    triangles[i + 1] = _currentMesh.triangles[i + 2];
-                    triangles[i + 2] = _currentMesh.triangles[i + 1];
-                }
-                copy.triangles = triangles;
-                copy.RecalculateNormals();
-
                 Gizmos.color = Color.blue;
                 Gizmos.DrawMesh(_currentMesh, transform.position);
                 Gizmos.color = Color.red;
-                Gizmos.DrawMesh(copy, transform.position);
+                Gizmos.DrawMesh(_invertedMesh, transform.position);
             }
 
             Gizmos.color = Color.white;

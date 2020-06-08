@@ -13,6 +13,8 @@ public class CubeConfigurations_Editor : Editor
 
     public override void OnInspectorGUI()
     {
+        base.OnInspectorGUI();
+
         GUIStyle rich = new GUIStyle(EditorStyles.boldLabel);
         rich.fontStyle = FontStyle.Bold;
         rich.fontSize = 12;
@@ -23,27 +25,24 @@ public class CubeConfigurations_Editor : Editor
         //    _csvPath = EditorUtility.OpenFilePanel("Load CSV configuration", "", "csv");
         //}
 
-        if (_csvPath.Length <= 0)
+        if (((CubeConfigurations)target).Configurations == null || ((CubeConfigurations)target).Configurations.Length == 0)
         {
             GUILayout.Label("<color=red>Please select a CSV configuration</color>", rich);
         }
+        else
+        {
+            GUILayout.Label("<color=green>CSV loaded successfully.</color>", rich);
+        }
 
-        
         if (GUILayout.Button("Load CSV configuration"))
         {
             Undo.RecordObject(target, "Load new CSV");
             _csvPath = EditorUtility.OpenFilePanel("Load CSV configuration", "", "csv");
-            //Reload conficgutation _csvpath
+            ((CubeConfigurations)target).Configurations = new CsvCubeConfigurationsLoader().LoadFromFile(_csvPath);
             EditorUtility.SetDirty(target);
         }
 
-
-        if (_csvPath.Length > 0)
-        {
-            GUILayout.Label("<color=green>Loaded CSV</color> : " + _csvPath, rich);
-        }
-
         GUILayout.Space(15.0f);
-        base.OnInspectorGUI();
+        
     }
 }
