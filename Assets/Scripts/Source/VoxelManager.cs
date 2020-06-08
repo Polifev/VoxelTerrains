@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using VoxelTerrains.ScriptableObjects;
 
 namespace VoxelTerrains
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using VoxelTerrains;
+using VoxelTerrains.ScriptableObjects;
 
-namespace VoxelTerrains.Tests
+namespace VoxelTerrains.Tests.ScriptableObjects
 {
     public class TestCsvCubeConfigurationsLoader
     {

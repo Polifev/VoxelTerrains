@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-namespace VoxelTerrains
+namespace VoxelTerrains.ScriptableObjects
 {
     public class CsvCubeConfigurationsLoader
     {
