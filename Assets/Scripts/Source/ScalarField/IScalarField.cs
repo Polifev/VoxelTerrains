@@ -4,6 +4,6 @@ namespace VoxelTerrains.ScalarField
 {
     public interface IScalarField
     {
-        float ValueAt(Vector3 vector); 
+        float ValueAt(Vector3 vector);
     }
 }
