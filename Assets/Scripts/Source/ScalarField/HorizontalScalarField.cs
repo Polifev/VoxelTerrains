@@ -7,19 +7,15 @@ using UnityEngine;
 
 namespace VoxelTerrains.ScalarField
 {
-    public class HorizontalScalarField : IScalarField
+    public class HorizontalScalarField : AbstractScalarField
     {
-        public float Height { get; private set; }
+        [SerializeField]
+        private float _height = 0.0f;
 
-        public HorizontalScalarField(float height)
-        {
-            Height = height;
-        }
-
-        public float ValueAt(Vector3 point)
+        public override float ValueAt(Vector3 point)
         {
             var result = 1.0f;
-            if(point.y > Height)
+            if(point.y > _height)
             {
                 result =  -1.0f;
             }

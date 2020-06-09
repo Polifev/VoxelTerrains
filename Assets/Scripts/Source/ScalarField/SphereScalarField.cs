@@ -8,24 +8,17 @@ using VoxelTerrains.ScalarField;
 
 namespace VoxelTerrains.ScalarField
 {
-    public class SphereScalarField: IScalarField
+    public class SphereScalarField: AbstractScalarField
     {
-        private float _squaredRadius;
-        public Vector3 Center { get; private set; }
-        public float Radius { get; private set; }
+        [SerializeField]
+        private Vector3 _center = Vector3.zero;
 
-        public SphereScalarField(float radius) : this(radius, Vector3.zero) {}
+        [SerializeField]
+        private float _radius = 1.0f;
 
-        public SphereScalarField(float radius, Vector3 center)
+        public override float ValueAt(Vector3 point)
         {
-            Radius = radius;
-            _squaredRadius = radius * radius;
-            Center = center;
-        }
-
-        public float ValueAt(Vector3 point)
-        {
-            return Vector3.Distance(point, Center) >= Radius ? -1.0f : 1.0f;
+            return (point - _center).sqrMagnitude >= _radius * _radius ? -1.0f : 1.0f;
         }
     }
 }

@@ -17,9 +17,9 @@ namespace VoxelTerrains.Renderer
         private float _tileSize = 0.1f;
         [SerializeField]
         private Vector3 _size = Vector3.one;
+        [SerializeField]
+        private AbstractScalarField _scalarField;
 
-        private IScalarField _scalarField = new SphereScalarField(2.5f);
-        //private IScalarField _scalarField = new HorizontalScalarField(0.0f);
         private MeshFilter _meshFilter = null;
 
         public void RefreshMesh()
@@ -35,7 +35,7 @@ namespace VoxelTerrains.Renderer
                 for(float y = (-_size / 2).y; y < (_size / 2).y; y += _tileSize)
                     for (float z = (-_size / 2).z; z < (_size / 2).z; z += _tileSize)
                     {
-                        int configurationIndex = ComputeIndex(x, y, z);
+                        int configurationIndex = ComputeIndex(x + transform.position.x, y + transform.position.y, z + transform.position.z);
                         var configuration = _configurations.Configurations[configurationIndex];
                         for(int i = 0; i < configuration.Vertices.Length; i++)
                         {
