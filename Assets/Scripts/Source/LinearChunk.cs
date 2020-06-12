@@ -9,6 +9,11 @@ namespace VoxelTerrains
 
         private float[,,] _data;
 
+        public LinearChunk(float[,,] data)
+        {
+            _data = data;
+        }
+
         public LinearChunk(Vector3Int size)
         {
             _data = new float[size.x, size.y, size.z];
@@ -48,6 +53,11 @@ namespace VoxelTerrains
 
             var floored = Vector3Int.FloorToInt(relativeLocation);
             var ceiled = Vector3Int.CeilToInt(relativeLocation);
+
+            if(floored == ceiled)
+            {
+                return _data[floored.x, floored.y, floored.z];
+            }
 
             float[] xInterpolations = 
             {

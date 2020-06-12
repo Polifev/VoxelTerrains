@@ -41,7 +41,7 @@ Shader "Voxel/FlatShaded"
 				nointerpolation half3 normal : NORMAL;
 				nointerpolation half4 color : COLOR;
 
-				nointerpolation LIGHTING_COORDS(4, 5)
+				LIGHTING_COORDS(4, 5)
 			};
 
 			v2f vert(appData v)
