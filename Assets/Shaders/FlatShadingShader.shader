@@ -2,8 +2,8 @@ Shader "Voxel/FlatShaded"
 {
 	Properties
 	{
-		_Gloss ("GLossiness", Range(0.0,1.0)) = 0.2
-		_Metalness ("GLossiness", Range(0.0,1.0)) = 0.0
+		_Gloss ("Glossiness", Range(0.0,1.0)) = 0.2
+		_Metalness ("Metalness", Range(0.0,1.0)) = 0.0
 	}
 	SubShader
 	{
@@ -37,10 +37,8 @@ Shader "Voxel/FlatShaded"
 				half4 B_wPosY	: ATTR1;
 				half4 N_wPosZ	: ATTR2;
 				float2 UV		: ATTR3;
-
-				nointerpolation half3 normal : NORMAL;
 				nointerpolation half4 color : COLOR;
-
+				float3 wPos : ATTR6;
 				LIGHTING_COORDS(4, 5)
 			};
 
@@ -48,18 +46,17 @@ Shader "Voxel/FlatShaded"
 			{
 				v2f o;
 				o.UV = v.texcoord;
-				o.color = v.color;
-				o.normal = v.normal;
+				o.color = v.color;	
 
 				o.pos = UnityObjectToClipPos (v.vertex);
 				o.N_wPosZ.xyz = normalize(mul(unity_ObjectToWorld, float4(v.normal,0)).xyz);
 				o.T_wPosX.xyz = normalize(mul(unity_ObjectToWorld, half4(v.tangent.xyz,0)).xyz);
 				o.B_wPosY.xyz = cross(o.N_wPosZ.xyz, o.T_wPosX.xyz) * v.tangent.w;
 
-				float3 wPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-				o.T_wPosX.w = wPos.x;
-				o.B_wPosY.w = wPos.y;
-				o.N_wPosZ.w = wPos.z;
+				o.wPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+				o.T_wPosX.w = o.wPos.x;
+				o.B_wPosY.w = o.wPos.y;
+				o.N_wPosZ.w = o.wPos.z;
 				
 				TRANSFER_VERTEX_TO_FRAGMENT(o)
 				
@@ -69,7 +66,7 @@ Shader "Voxel/FlatShaded"
 			float4 frag(v2f i) : COLOR
 			{	
 				float4 o;
-				half3 N = i.normal;
+				half3 N = normalize( cross( ddy( i.wPos ), ddx( i.wPos ) ) );
 				half3 L = _WorldSpaceLightPos0;
 				half3 wPos = float3(i.T_wPosX.w,i.B_wPosY.w,i.N_wPosZ.w);
 				half3 V = normalize(_WorldSpaceCameraPos-wPos);
