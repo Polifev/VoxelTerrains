@@ -4,22 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VoxelTerrains.ScalarField;
 
 namespace VoxelTerrains.ScalarField
 {
-    public class HorizontalScalarField : AbstractScalarField
+    public class SphereScalarField: AbstractScalarField
     {
         [SerializeField]
-        private float _height = 0.0f;
+        private Vector3 _center = Vector3.zero;
+
+        [SerializeField]
+        private float _radius = 1.0f;
 
         public override float ValueAt(Vector3 point)
         {
-            var result = 1.0f;
-            if(point.y > _height)
-            {
-                result =  -1.0f;
-            }
-            return result;
+            return (point - _center).sqrMagnitude >= _radius * _radius ? -1.0f : 1.0f;
         }
     }
 }
