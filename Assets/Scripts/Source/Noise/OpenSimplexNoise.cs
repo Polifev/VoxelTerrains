@@ -40,14 +40,14 @@ namespace VoxelTerrains.Noise
 		private static double NORM_CONSTANT_3D = 103;
 		private static double NORM_CONSTANT_4D = 30;
 
-		private static long DEFAULT_SEED = 0;
+		//private static long DEFAULT_SEED = 0;
 
 		private short[] perm;
 		private short[] permGradIndex3D;
 
 		public OpenSimplexNoise()
 		{
-			DEFAULT_SEED = 0;
+			//DEFAULT_SEED = 0;
 		}
 
 		public OpenSimplexNoise(short[] perm)

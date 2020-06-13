@@ -12,13 +12,13 @@ namespace VoxelTerrains.Renderer
     public class VoxelRenderer : MonoBehaviour
     {
         [SerializeField]
-        private CubeConfigurations _configurations;
+        private CubeConfigurations _configurations = null;
         [SerializeField, Range(0.001f, 10.0f)]
         private float _tileSize = 0.1f;
         [SerializeField]
         private Vector3 _size = Vector3.one;
         [SerializeField]
-        private AbstractScalarField _scalarField;
+        private AbstractScalarField _scalarField = null;
 
         private MeshFilter _meshFilter = null;
 
