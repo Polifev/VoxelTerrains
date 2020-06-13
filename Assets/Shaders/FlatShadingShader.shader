@@ -18,7 +18,6 @@ Shader "Voxel/FlatShaded"
 			#include "UnityCG.cginc"
 			#include "Lighting.cginc"
 			#include "AutoLight.cginc"
-			#include "Displace.cginc"
 			
 			half _Gloss, _Metalness;
 
