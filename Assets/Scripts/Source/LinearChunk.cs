@@ -54,12 +54,16 @@ namespace VoxelTerrains
             var floored = Vector3Int.FloorToInt(relativeLocation);
             var ceiled = Vector3Int.CeilToInt(relativeLocation);
 
-            if(floored == ceiled)
+            if (floored == ceiled)
             {
                 return _data[floored.x, floored.y, floored.z];
             }
+            else
+            {
+                ceiled = floored + Vector3Int.one;
+            }
 
-            float[] xInterpolations = 
+            float[] xInterpolations =
             {
                 Mathf.Lerp(
                     _data[floored.x, floored.x, floored.x],
@@ -86,7 +90,6 @@ namespace VoxelTerrains
             };
 
             float zInterpolation = Mathf.Lerp(yInterpolations[0], yInterpolations[1], (relativeLocation.z - floored.z));
-
             return zInterpolation;
         }
     }
