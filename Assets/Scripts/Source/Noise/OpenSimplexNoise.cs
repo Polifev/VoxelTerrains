@@ -27,7 +27,7 @@ using UnityScript.Scripting.Pipeline;
 
 namespace VoxelTerrains.Noise
 {
-    public class OpenSimplexNoise : MonoBehaviour
+    public class OpenSimplexNoise
     {
 		private static double STRETCH_CONSTANT_2D = -0.211324865405187;    //(1/Math.sqrt(2+1)-1)/2;
 		private static double SQUISH_CONSTANT_2D = 0.366025403784439;      //(Math.sqrt(2+1)-1)/2;
@@ -45,10 +45,10 @@ namespace VoxelTerrains.Noise
 		private short[] perm;
 		private short[] permGradIndex3D;
 
-		public OpenSimplexNoise()
-		{
-			//DEFAULT_SEED = 0;
-		}
+		//public OpenSimplexNoise()
+		//{
+		//	DEFAULT_SEED = 0;
+		//}
 
 		public OpenSimplexNoise(short[] perm)
 		{
