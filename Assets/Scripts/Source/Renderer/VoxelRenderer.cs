@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace VoxelTerrains.Renderer
         [SerializeField]
         private CubeConfigurations _configurations = null;
         [SerializeField, Range(0.001f, 10.0f)]
-        private float _tileSize = 0.1f;
+        private float _tileSize = 1.0f;
         [SerializeField]
         private Vector3 _size = Vector3.one;
         [SerializeField]
@@ -49,8 +50,15 @@ namespace VoxelTerrains.Renderer
                         }
                         for (int i = 0; i < configuration.Triangles.Length; i++)
                         {
-                            var correspondingVertice = new Vector3(x, y, z) + configuration.Vertices[configuration.Triangles[i]] * _tileSize;
-                            triangles.Add(alreadyPresentVertices[correspondingVertice]);
+                            try
+                            {
+                                var correspondingVertice = new Vector3(x, y, z) + configuration.Vertices[configuration.Triangles[i]] * _tileSize;
+                                triangles.Add(alreadyPresentVertices[correspondingVertice]);
+                            }catch (Exception e)
+                            {
+                                Debug.LogError(e);
+                            }
+                            
                         }
                     }
 
