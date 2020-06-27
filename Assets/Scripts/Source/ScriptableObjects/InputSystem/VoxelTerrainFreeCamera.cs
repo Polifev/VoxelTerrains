@@ -51,6 +51,14 @@ namespace VoxelTerrains
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""SecondaryAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""0066dcf7-7255-4fa1-8c54-5379c53daba9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -658,6 +666,39 @@ namespace VoxelTerrains
                     ""action"": ""PrimaryAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""38a08db1-b0a3-43c8-acc1-b3b2ef893481"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SecondaryAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0c51995-5136-49c8-a427-7033f6dee342"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Xbox"",
+                    ""action"": ""SecondaryAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e778fcba-4f15-40cd-bad2-d46738d6457b"",
+                    ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PS4"",
+                    ""action"": ""SecondaryAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -709,6 +750,7 @@ namespace VoxelTerrains
             m_Player_Rotation = m_Player.FindAction("Rotation", throwIfNotFound: true);
             m_Player_Ascend = m_Player.FindAction("Ascend", throwIfNotFound: true);
             m_Player_PrimaryAction = m_Player.FindAction("PrimaryAction", throwIfNotFound: true);
+            m_Player_SecondaryAction = m_Player.FindAction("SecondaryAction", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -762,6 +804,7 @@ namespace VoxelTerrains
         private readonly InputAction m_Player_Rotation;
         private readonly InputAction m_Player_Ascend;
         private readonly InputAction m_Player_PrimaryAction;
+        private readonly InputAction m_Player_SecondaryAction;
         public struct PlayerActions
         {
             private @VoxelTerrainFreeCamera m_Wrapper;
@@ -770,6 +813,7 @@ namespace VoxelTerrains
             public InputAction @Rotation => m_Wrapper.m_Player_Rotation;
             public InputAction @Ascend => m_Wrapper.m_Player_Ascend;
             public InputAction @PrimaryAction => m_Wrapper.m_Player_PrimaryAction;
+            public InputAction @SecondaryAction => m_Wrapper.m_Player_SecondaryAction;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -791,6 +835,9 @@ namespace VoxelTerrains
                     @PrimaryAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPrimaryAction;
                     @PrimaryAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPrimaryAction;
                     @PrimaryAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPrimaryAction;
+                    @SecondaryAction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryAction;
+                    @SecondaryAction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryAction;
+                    @SecondaryAction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryAction;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -807,6 +854,9 @@ namespace VoxelTerrains
                     @PrimaryAction.started += instance.OnPrimaryAction;
                     @PrimaryAction.performed += instance.OnPrimaryAction;
                     @PrimaryAction.canceled += instance.OnPrimaryAction;
+                    @SecondaryAction.started += instance.OnSecondaryAction;
+                    @SecondaryAction.performed += instance.OnSecondaryAction;
+                    @SecondaryAction.canceled += instance.OnSecondaryAction;
                 }
             }
         }
@@ -844,6 +894,7 @@ namespace VoxelTerrains
             void OnRotation(InputAction.CallbackContext context);
             void OnAscend(InputAction.CallbackContext context);
             void OnPrimaryAction(InputAction.CallbackContext context);
+            void OnSecondaryAction(InputAction.CallbackContext context);
         }
     }
 }

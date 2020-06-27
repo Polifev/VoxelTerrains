@@ -19,11 +19,11 @@ namespace VoxelTerrains
 
         private void Start()
         {
-            for(int x = 0; x < 4; x++)
+            for(int x = -4; x < 4; x++)
             {
-                for (int y = 0; y < 4; y++)
+                for (int y = -4; y < 4; y++)
                 {
-                    for (int z = 0; z < 4; z++)
+                    for (int z = -4; z < 4; z++)
                     {
                         InstantiateRenderer(new Vector3Int(x, y, z)).RefreshMesh();
                     }
@@ -55,27 +55,28 @@ namespace VoxelTerrains
             updateIndexes[7] = rendererIndex + new Vector3Int(1, 1, 0);
             updateIndexes[8] = rendererIndex + new Vector3Int(1, -1, 0);
             updateIndexes[9] = rendererIndex + new Vector3Int(-1, 1, 0);
-            updateIndexes[9] = rendererIndex + new Vector3Int(-1, -1, 0);
+            updateIndexes[10] = rendererIndex + new Vector3Int(-1, -1, 0);
 
-            updateIndexes[7] = rendererIndex + new Vector3Int(1, 0, 1);
-            updateIndexes[8] = rendererIndex + new Vector3Int(1, 0, -1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(-1, 0, 1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(-1, 0, -1);
+            updateIndexes[11] = rendererIndex + new Vector3Int(1, 0, 1);
+            updateIndexes[12] = rendererIndex + new Vector3Int(1, 0, -1);
+            updateIndexes[13] = rendererIndex + new Vector3Int(-1, 0, 1);
+            // shhht (if you want to shift everything, do it yourself)
+            updateIndexes[26] = rendererIndex + new Vector3Int(-1, 0, -1);
 
-            updateIndexes[7] = rendererIndex + new Vector3Int(0, 1, 1);
-            updateIndexes[8] = rendererIndex + new Vector3Int(0, 1, -1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(0, -1, 1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(0, -1, -1);
+            updateIndexes[14] = rendererIndex + new Vector3Int(0, 1, 1);
+            updateIndexes[15] = rendererIndex + new Vector3Int(0, 1, -1);
+            updateIndexes[16] = rendererIndex + new Vector3Int(0, -1, 1);
+            updateIndexes[17] = rendererIndex + new Vector3Int(0, -1, -1);
 
             // vertices
-            updateIndexes[9] = rendererIndex + new Vector3Int(1, 1, 1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(1, 1, -1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(1, -1, 1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(1, -1, -1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(-1, 1, 1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(-1, 1, -1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(-1, -1, 1);
-            updateIndexes[9] = rendererIndex + new Vector3Int(-1, -1, -1);
+            updateIndexes[18] = rendererIndex + new Vector3Int(1, 1, 1);
+            updateIndexes[19] = rendererIndex + new Vector3Int(1, 1, -1);
+            updateIndexes[20] = rendererIndex + new Vector3Int(1, -1, 1);
+            updateIndexes[21] = rendererIndex + new Vector3Int(1, -1, -1);
+            updateIndexes[22] = rendererIndex + new Vector3Int(-1, 1, 1);
+            updateIndexes[23] = rendererIndex + new Vector3Int(-1, 1, -1);
+            updateIndexes[24] = rendererIndex + new Vector3Int(-1, -1, 1);
+            updateIndexes[25] = rendererIndex + new Vector3Int(-1, -1, -1);
 
 
             foreach (Vector3Int index in updateIndexes)

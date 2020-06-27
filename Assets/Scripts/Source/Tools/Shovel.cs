@@ -11,13 +11,14 @@ namespace VoxelTerrains.Tools
         [SerializeField]
         private ChunkBasedScalarField terrain;
         [SerializeField]
-        private float _range = 10.0f;
+        private float _range = 25.0f;
         [SerializeField]
-        private float _strength = 0.01f;
+        private float _strength = 10.0f;
         [SerializeField]
         private LayerMask _voxelMask = 0;
 
         private bool _digging = false;
+        private bool _placing = false;
 
         public void OnPrimaryAction(InputAction.CallbackContext context)
         {
@@ -31,37 +32,55 @@ namespace VoxelTerrains.Tools
             }
         }
 
+        public void OnSecondaryAction(InputAction.CallbackContext context)
+        {
+            if (context.phase == InputActionPhase.Started)
+            {
+                _placing = true;
+            }
+            if (context.phase == InputActionPhase.Canceled)
+            {
+                _placing = false;
+            }
+        }
+
         private void Update()
         {
             if (_digging)
             {
                 Dig();
+            }
+            else if(_placing)
+            {
+                Place();
             }   
         }
 
         private void Dig()
         {
-            Vector3 target = RaycastForward();
-            
-            if(target != Vector3.negativeInfinity)
+            if (RaycastForward(out Vector3 target))
             {
                 terrain.AddValueAt(target, Time.deltaTime * _strength * -1.0f);
             }
-            else
-            {
-                Debug.Log("Raycast failed");
-            }
-            
         }
 
-        private Vector3 RaycastForward()
+        private void Place()
+        {
+            if(RaycastForward(out Vector3 target))
+            {
+                terrain.AddValueAt(target, Time.deltaTime * _strength);
+            }
+        }
+
+        private bool RaycastForward(out Vector3 hitPosition)
         {
             if (Physics.Raycast(transform.position, transform.forward, out var hit, _range, _voxelMask))
             {
-                Debug.Log(hit.point);
-                return hit.point;
+                hitPosition = hit.point;
+                return true;
             }
-            return Vector3.negativeInfinity;
+            hitPosition = Vector3.zero;
+            return false;
         }
     }
 }

@@ -24,6 +24,7 @@ namespace VoxelTerrains.Camera
         {
             _parent = transform.parent;
             Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Confined;
         }
 
         public void OnMovement(InputAction.CallbackContext context)

@@ -451,11 +451,16 @@ PrefabInstance:
     - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
         type: 3}
       propertyPath: m_ActionEvents.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
@@ -491,6 +496,41 @@ PrefabInstance:
     - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_ActionId
+      value: 0066dcf7-7255-4fa1-8c54-5379c53daba9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_ActionName
+      value: Player/SecondaryAction[/Mouse/rightButton,/XInputControllerWindows/buttonWest]
+      objectReference: {fileID: 0}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 37477067}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSecondaryAction
+      objectReference: {fileID: 0}
+    - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
+        type: 3}
+      propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6729074537807555503, guid: c5fa53458c80d1d458b7576205495a9a,
