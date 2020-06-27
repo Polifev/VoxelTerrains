@@ -15,6 +15,8 @@ namespace VoxelTerrains.Renderer
         [SerializeField]
         private bool _debugMode = false;
         [SerializeField]
+        private bool _realTime = false;
+        [SerializeField]
         private CubeConfigurations _configurations = null;
         [SerializeField, Range(0.001f, 10.0f)]
         private float _tileSize = 1.0f;
@@ -24,6 +26,14 @@ namespace VoxelTerrains.Renderer
         private AbstractScalarField _scalarField = null;
 
         private MeshFilter _meshFilter = null;
+
+        public void Update()
+        {
+            if (_realTime)
+            {
+                RefreshMesh();
+            }
+        }
 
         public void RefreshMesh()
         {

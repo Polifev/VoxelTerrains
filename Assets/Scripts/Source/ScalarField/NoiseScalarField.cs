@@ -26,12 +26,12 @@ namespace VoxelTerrains.ScalarField
                 6,
                 2,
                 0.5f,
-                0.025f,
+                0.01f,
                 0,
                 2,
                 0,
                 NoiseHandler.NoiseType.OpenSimplexNoise,
-                NoiseHandler.NoiseAdditionType.Turbulence);
+                NoiseHandler.NoiseAdditionType.FBM);
 
             if(height > 0.0f)
             {
