@@ -22,10 +22,7 @@ namespace VoxelTerrains.ScalarField
 
         private Dictionary<Vector3Int, Chunk> _chunks = new Dictionary<Vector3Int, Chunk>();
 
-        private void OnValidate()
-        {
-            ResetChunks();
-        }
+        public override event TerrainChangedEventHandler OnTerrainChanged;
 
         public override float ValueAt(Vector3 location)
         {
@@ -71,6 +68,33 @@ namespace VoxelTerrains.ScalarField
             return zInterpolation;
         }
 
+        public void AddValueAt(Vector3 location, float value)
+        {
+            var floored = Vector3Int.FloorToInt(location);
+            var ceiled = Vector3Int.CeilToInt(location);
+
+            if (floored == ceiled)
+            {
+                AddValueInChunk(floored, value);
+            }
+            else
+            {
+                ceiled = floored + Vector3Int.one;
+
+                AddValueInChunk(new Vector3Int(floored.x, floored.y, floored.z), value);
+                AddValueInChunk(new Vector3Int(ceiled.x, floored.y, floored.z), value);
+                AddValueInChunk(new Vector3Int(ceiled.x, floored.y, ceiled.z), value);
+                AddValueInChunk(new Vector3Int(floored.x, floored.y, ceiled.z), value);
+
+                AddValueInChunk(new Vector3Int(floored.x, ceiled.y, floored.z), value);
+                AddValueInChunk(new Vector3Int(ceiled.x, ceiled.y, floored.z), value);
+                AddValueInChunk(new Vector3Int(ceiled.x, ceiled.y, ceiled.z), value);
+                AddValueInChunk(new Vector3Int(floored.x, ceiled.y, ceiled.z), value);
+            }
+
+            OnTerrainChanged?.Invoke(location);
+        }
+
         private float ValueFromChunk(Vector3Int vector)
         {
             var divided = new Vector3();
@@ -89,6 +113,26 @@ namespace VoxelTerrains.ScalarField
             }
 
             return _chunks[chunkIndex].ValueAt(localVector);
+        }
+
+        private void AddValueInChunk(Vector3Int vector, float value)
+        {
+            var divided = new Vector3();
+            divided.x = (float)vector.x / _chunkSize.x;
+            divided.y = (float)vector.y / _chunkSize.y;
+            divided.z = (float)vector.z / _chunkSize.z;
+            var chunkIndex = Vector3Int.FloorToInt(divided);
+            chunkIndex.x *= _chunkSize.x;
+            chunkIndex.y *= _chunkSize.y;
+            chunkIndex.z *= _chunkSize.z;
+            var localVector = vector - chunkIndex;
+
+            if (!_chunks.ContainsKey(chunkIndex))
+            {
+                _chunks[chunkIndex] = GenerateChunk(chunkIndex);
+            }
+
+            _chunks[chunkIndex].SetValueAt(localVector, Mathf.Clamp(_chunks[chunkIndex].ValueAt(localVector) + value, -1.0f, 1.0f));
         }
 
         private Chunk GenerateChunk(Vector3Int chunkPosition)

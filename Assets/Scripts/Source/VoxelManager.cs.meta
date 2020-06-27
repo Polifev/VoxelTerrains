@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f7b5c8fe2bae9a643bc1a77ead54e438
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _terrain: {instanceID: 0}
+  - _voxelRendererPrefab: {fileID: 1138715265252418042, guid: 2cbd49b765489df49b39b64d0cc775f7,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

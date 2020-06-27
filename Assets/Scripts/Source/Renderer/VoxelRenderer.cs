@@ -10,12 +10,14 @@ namespace VoxelTerrains.Renderer
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(MeshFilter))]
+    [RequireComponent(typeof(MeshCollider))]
     public class VoxelRenderer : MonoBehaviour
     {
         [SerializeField]
         private bool _debugMode = false;
         [SerializeField]
         private bool _realTime = false;
+        
         [SerializeField]
         private CubeConfigurations _configurations = null;
         [SerializeField, Range(0.001f, 10.0f)]
@@ -25,7 +27,20 @@ namespace VoxelTerrains.Renderer
         [SerializeField]
         private AbstractScalarField _scalarField = null;
 
+        public AbstractScalarField ScalarField
+        {
+            get => _scalarField;
+            set => _scalarField = value;
+        }
+
+        public Vector3 Size
+        {
+            get => _size;
+            set => _size = value;
+        }
+
         private MeshFilter _meshFilter = null;
+        private MeshCollider _meshCollider = null;
 
         public void Update()
         {
@@ -38,6 +53,7 @@ namespace VoxelTerrains.Renderer
         public void RefreshMesh()
         {
             _meshFilter = GetComponent<MeshFilter>();
+            _meshCollider = GetComponent<MeshCollider>();
 
             IList<Vector3> vertices = new List<Vector3>();
             IList<int> triangles = new List<int>();
@@ -79,7 +95,8 @@ namespace VoxelTerrains.Renderer
             mesh.vertices = vertices.ToArray();
             mesh.triangles = triangles.ToArray();
             mesh.RecalculateNormals();
-            _meshFilter.mesh = mesh;
+            _meshFilter.sharedMesh = mesh;
+            _meshCollider.sharedMesh = mesh;
         }
 
         private int ComputeIndex(float x, float y, float z)

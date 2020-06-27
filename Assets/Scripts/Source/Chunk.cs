@@ -35,8 +35,7 @@ namespace VoxelTerrains
                 throw new ArgumentOutOfRangeException("Vector parameter is out of range");
             }
 
-            var floored = Vector3Int.FloorToInt(relativeLocation);
-            _data[floored.x, floored.y, floored.z] = value;
+            _data[relativeLocation.x, relativeLocation.y, relativeLocation.z] = value;
         }
 
         public float ValueAt(Vector3Int relativeLocation)
