@@ -5,7 +5,7 @@ namespace VoxelTerrains
 {
     public class Chunk
     {
-        public Vector3 Dimensions => new Vector3(_data.GetLength(0), _data.GetLength(1), _data.GetLength(2));
+        public Vector3Int Dimensions => new Vector3Int(_data.GetLength(0), _data.GetLength(1), _data.GetLength(2));
 
         private float[,,] _data;
 

@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe71e90641377784f8442b2768339f62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  terrain: {fileID: 899083371}
+  _terrain: {fileID: 0}
   _range: 100
   _strength: 10
   _voxelMask:
@@ -379,9 +379,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 955350828}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aaad33ba331d664891f9c6ee97eb9c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 27b3761e5ac8eb949b8692aa893a02b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _highestValueAboveSeaLevel: 16
+  _deepestValueBelowSeaLevel: 8
 --- !u!4 &955350830
 Transform:
   m_ObjectHideFlags: 0
@@ -426,12 +428,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _terrain: {fileID: 899083371}
-  _rendererSize: 8
+  _rendererSize: 4
   _voxelRendererPrefab: {fileID: 1138715265252418042, guid: 2cbd49b765489df49b39b64d0cc775f7,
     type: 3}
   _voxelAgents:
   - {fileID: 496504563}
-  _allowedRenderPerFrame: 2
+  _allowedRenderPerFrame: 16
 --- !u!4 &1464881907
 Transform:
   m_ObjectHideFlags: 0

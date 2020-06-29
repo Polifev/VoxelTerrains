@@ -9,7 +9,7 @@ namespace VoxelTerrains.Tools
     public class Shovel : MonoBehaviour
     {
         [SerializeField]
-        private ChunkBasedScalarField terrain;
+        private ChunkBasedScalarField _terrain = null;
         [SerializeField]
         private float _range = 25.0f;
         [SerializeField]
@@ -60,7 +60,7 @@ namespace VoxelTerrains.Tools
         {
             if (RaycastForward(out Vector3 target))
             {
-                terrain.AddValueAt(target, Time.deltaTime * _strength * -1.0f);
+                _terrain.AddValueAt(target, Time.deltaTime * _strength * -1.0f);
             }
         }
 
@@ -68,7 +68,7 @@ namespace VoxelTerrains.Tools
         {
             if(RaycastForward(out Vector3 target))
             {
-                terrain.AddValueAt(target, Time.deltaTime * _strength);
+                _terrain.AddValueAt(target, Time.deltaTime * _strength);
             }
         }
 

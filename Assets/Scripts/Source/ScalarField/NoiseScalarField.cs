@@ -17,12 +17,18 @@ namespace VoxelTerrains.ScalarField
         [SerializeField]
         private float _deepestValueBelowSeaLevel = 64.0f;
 
+        private IDictionary<Vector2, float> _heightAtXZ = new Dictionary<Vector2, float>();
 
         public override float ValueAt(Vector3 vector)
         {
-            float height = NoiseHandler.Noise(
-                vector.x,
-                vector.z,
+            var y = vector.y;
+            var xz = new Vector2(vector.x, vector.z);
+
+            if (!_heightAtXZ.ContainsKey(xz))
+            {
+                _heightAtXZ[xz] = NoiseHandler.Noise(
+                xz.x,
+                xz.y,
                 6,
                 2,
                 0.5f,
@@ -32,8 +38,10 @@ namespace VoxelTerrains.ScalarField
                 0,
                 NoiseHandler.NoiseType.OpenSimplexNoise,
                 NoiseHandler.NoiseAdditionType.FBM);
+            }
+            float height = _heightAtXZ[xz];
 
-            if(height > 0.0f)
+            if (height > 0.0f)
             {
                 height *= _highestValueAboveSeaLevel;
             }
@@ -42,7 +50,7 @@ namespace VoxelTerrains.ScalarField
                 height *= _deepestValueBelowSeaLevel;
             }
 
-            return (vector.y > height) ? -1.0f : 1.0f;
+            return (y > height) ? -1.0f : 1.0f;
         }
     }
 }

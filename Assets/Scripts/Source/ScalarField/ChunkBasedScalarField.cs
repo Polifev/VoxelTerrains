@@ -27,7 +27,6 @@ namespace VoxelTerrains.ScalarField
             _chunks = new Dictionary<Vector3Int, Chunk>();
         }
 
-
         public override float ValueAt(Vector3 location)
         {
             var floored = Vector3Int.FloorToInt(location);
@@ -96,61 +95,29 @@ namespace VoxelTerrains.ScalarField
             OnTerrainChanged?.Invoke(location);
         }
 
-        public void LoadChunk(Vector3Int chunkIndex)
-        {
-            var chunkPosition = new Vector3Int();
-            chunkPosition.x = chunkIndex.x * _chunkSize.x;
-            chunkPosition.y = chunkIndex.y * _chunkSize.y;
-            chunkPosition.z = chunkIndex.z * _chunkSize.z;
-
-            if (!_chunks.ContainsKey(chunkPosition))
-            {
-                _chunks[chunkPosition] = GenerateChunk(chunkPosition);
-            }
-        }
         // Private methods
         private float ValueFromChunk(Vector3Int vector)
         {
-            var divided = new Vector3();
-            divided.x = (float)vector.x / _chunkSize.x;
-            divided.y = (float)vector.y / _chunkSize.y;
-            divided.z = (float)vector.z / _chunkSize.z;
-            var chunkIndex = Vector3Int.FloorToInt(divided);
-            chunkIndex.x *= _chunkSize.x;
-            chunkIndex.y *= _chunkSize.y;
-            chunkIndex.z *= _chunkSize.z;
-            var localVector = vector - chunkIndex;
-
+            var chunkIndex = Util.GetChunkIndex(vector, _chunkSize);
+            var chunkPosition = Util.MultiplyCoordsInt(chunkIndex, _chunkSize);
+            var localVector = vector - chunkPosition;
             if (!_chunks.ContainsKey(chunkIndex))
             {
-                _chunks[chunkIndex] = GenerateChunk(chunkIndex);
+                _chunks[chunkIndex] = GenerateChunk(chunkPosition);
             }
-
             return _chunks[chunkIndex].ValueAt(localVector);
         }
 
         private void AddValueInChunk(Vector3Int vector, float value)
         {
-            var divided = new Vector3();
-            divided.x = (float)vector.x / _chunkSize.x;
-            divided.y = (float)vector.y / _chunkSize.y;
-            divided.z = (float)vector.z / _chunkSize.z;
-
-            var chunkIndex = Vector3Int.FloorToInt(divided);
-
-            var chunkPosition = new Vector3Int();
-            chunkPosition.x = chunkIndex.x * _chunkSize.x;
-            chunkPosition.y = chunkIndex.x * _chunkSize.y;
-            chunkPosition.z = chunkIndex.x * _chunkSize.z;
-
+            var chunkIndex = Util.GetChunkIndex(vector, _chunkSize);
+            var chunkPosition = Util.MultiplyCoordsInt(chunkIndex, _chunkSize);
             var localVector = vector - chunkPosition;
-
-            if (!_chunks.ContainsKey(chunkPosition))
+            if (!_chunks.ContainsKey(chunkIndex))
             {
-                _chunks[chunkPosition] = GenerateChunk(chunkPosition);
+                _chunks[chunkIndex] = GenerateChunk(chunkPosition);
             }
-
-            _chunks[chunkPosition].SetValueAt(localVector, Mathf.Clamp(_chunks[chunkPosition].ValueAt(localVector) + value, -1.0f, 1.0f));
+            _chunks[chunkIndex].SetValueAt(localVector, Mathf.Clamp(_chunks[chunkIndex].ValueAt(localVector) + value, -1.0f, 1.0f));
         }
 
         private Chunk GenerateChunk(Vector3Int chunkPosition)

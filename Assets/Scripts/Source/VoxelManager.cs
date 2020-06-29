@@ -10,20 +10,20 @@ namespace VoxelTerrains
     public class VoxelManager : MonoBehaviour
     {
         [SerializeField]
-        private AbstractScalarField _terrain;
+        private AbstractScalarField _terrain = null;
         [SerializeField]
         private int _rendererSize = 4;
         [SerializeField]
-        private GameObject _voxelRendererPrefab;
+        private GameObject _voxelRendererPrefab = null;
         [SerializeField]
-        private Transform[] _voxelAgents;
+        private Transform[] _voxelAgents = new Transform[0];
         [SerializeField]
         private int _allowedRenderPerFrame = 1;
 
 
         private Dictionary<Vector3Int, GameObject> _renderers = new Dictionary<Vector3Int, GameObject>();
-        private Coroutine[] _agentRenderingCoroutines;
-        private Vector3Int[] _agentChunkIndices;
+        private Coroutine[] _agentRenderingCoroutines = new Coroutine[0];
+        private Vector3Int[] _agentChunkIndices = new Vector3Int[0];
 
         private void Start()
         {
@@ -36,7 +36,7 @@ namespace VoxelTerrains
             for (int i = 0; i < _voxelAgents.Length; i++)
             {
                 var agent = _voxelAgents[i];
-                var chunkIndex = GetChunkIndex(agent.position, Vector3Int.one * _rendererSize);
+                var chunkIndex = Util.GetChunkIndex(agent.position, Vector3Int.one * _rendererSize);
                 _agentChunkIndices[i] = chunkIndex;
                 _agentRenderingCoroutines[i] = StartCoroutine(SpawnRenderersCoroutine(chunkIndex));
             }
@@ -49,7 +49,7 @@ namespace VoxelTerrains
             for(int i = 0; i < _voxelAgents.Length; i++)
             {
                 var agent = _voxelAgents[i];
-                var chunkIndex = GetChunkIndex(agent.position, Vector3Int.one * _rendererSize);
+                var chunkIndex = Util.GetChunkIndex(agent.position, Vector3Int.one * _rendererSize);
                 if(chunkIndex != _agentChunkIndices[i])
                 {
                     _agentChunkIndices[i] = chunkIndex;
@@ -65,7 +65,7 @@ namespace VoxelTerrains
             int count = 0;
             while (true)
             {
-                foreach (var spiral in GetSquaredSpiral(int.MaxValue))
+                foreach (var spiral in Util.GetSquaredSpiral(int.MaxValue))
                 {
                     for (int i = 0; i < 8; i++)
                     {
@@ -94,43 +94,9 @@ namespace VoxelTerrains
             }
         }
 
-        private static Vector3Int GetChunkIndex(Vector3 position, Vector3Int chunkSize)
-        {
-            int x = Mathf.FloorToInt(position.x / chunkSize.x);
-            int y = Mathf.FloorToInt(position.y / chunkSize.y);
-            int z = Mathf.FloorToInt(position.z / chunkSize.z);
-            return new Vector3Int(x, y, z);
-        }
-
-        private static IEnumerable<Vector2Int> GetSquaredSpiral(int total)
-        {
-            var lastPosition = Vector2Int.zero;
-            var currentOrientation = 0;
-            var orientations = new Vector2Int[]
-            {
-                        new Vector2Int(0, 1),
-                        new Vector2Int(1, 0),
-                        new Vector2Int(0, -1),
-                        new Vector2Int(-1, 0)
-            };
-
-            for (int i = 0; i < total; i++)
-            {
-                for (int twice = 0; twice < 2; twice++)
-                {
-                    for (int j = 0; j < i; j++)
-                    {
-                        yield return lastPosition;
-                        lastPosition = lastPosition + orientations[currentOrientation];
-                    }
-                    currentOrientation = (currentOrientation + 1) % 4;
-                }
-            }
-        }
-
         private void RenderChunksAround(Vector3 location)
         {
-            Vector3Int centerIndex = GetChunkIndex(location, Vector3Int.one * _rendererSize);
+            Vector3Int centerIndex = Util.GetChunkIndex(location, Vector3Int.one * _rendererSize);
 
             IList<Vector3Int> updateIndexes = new List<Vector3Int>();
             updateIndexes.Add(centerIndex);
@@ -186,10 +152,7 @@ namespace VoxelTerrains
             var renderer = instance.GetComponent<VoxelRenderer>();
 
             renderer.RefreshMesh();
-            if (renderer.isEmpty())
-            {
-                instance.SetActive(false);
-            }
+            instance.SetActive(!renderer.isEmpty());
         }
 
         private VoxelRenderer InstantiateRenderer(Vector3Int index)
