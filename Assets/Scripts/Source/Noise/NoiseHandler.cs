@@ -208,3 +208,15 @@ namespace VoxelTerrains.Noise
         }
     }
 }
+
+
+// Value    Noise 2D, Derivatives: https://www.shadertoy.com/view/4dXBRH
+// Gradient Noise 2D, Derivatives: https://www.shadertoy.com/view/XdXBRH
+// Value    Noise 3D, Derivatives: https://www.shadertoy.com/view/XsXfRH
+// Gradient Noise 3D, Derivatives: https://www.shadertoy.com/view/4dffRH
+// Value    Noise 2D             : https://www.shadertoy.com/view/lsf3WH
+// Value    Noise 3D             : https://www.shadertoy.com/view/4sfGzS
+// Gradient Noise 2D             : https://www.shadertoy.com/view/XdXGW8
+// Gradient Noise 3D             : https://www.shadertoy.com/view/Xsl3Dl
+// Simplex  Noise 2D             : https://www.shadertoy.com/view/Msf3WH
+// Wave     Noise 2D             : https://www.shadertoy.com/view/tldSRj
