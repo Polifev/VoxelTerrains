@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,19 +11,22 @@ namespace VoxelTerrains.ScalarField
     [ExecuteInEditMode]
     public class ChunkBasedScalarField : AbstractScalarField
     {
+        // Private fields
         [SerializeField]
         private AbstractScalarField _worldGenerator = null;
         [SerializeField]
         private Vector3Int _chunkSize = Vector3Int.one * 16;
+        private IDictionary<Vector3Int, Chunk> _chunks = new ConcurrentDictionary<Vector3Int, Chunk>();
+        
+        // Events
+        public override event TerrainChangedEventHandler OnTerrainChanged;
 
+        // Public methods
         public void ResetChunks()
         {
             _chunks = new Dictionary<Vector3Int, Chunk>();
         }
 
-        private Dictionary<Vector3Int, Chunk> _chunks = new Dictionary<Vector3Int, Chunk>();
-
-        public override event TerrainChangedEventHandler OnTerrainChanged;
 
         public override float ValueAt(Vector3 location)
         {
@@ -80,21 +84,31 @@ namespace VoxelTerrains.ScalarField
             else
             {
                 ceiled = floored + Vector3Int.one;
-
                 AddValueInChunk(new Vector3Int(floored.x, floored.y, floored.z), value);
                 AddValueInChunk(new Vector3Int(ceiled.x, floored.y, floored.z), value);
                 AddValueInChunk(new Vector3Int(ceiled.x, floored.y, ceiled.z), value);
                 AddValueInChunk(new Vector3Int(floored.x, floored.y, ceiled.z), value);
-
                 AddValueInChunk(new Vector3Int(floored.x, ceiled.y, floored.z), value);
                 AddValueInChunk(new Vector3Int(ceiled.x, ceiled.y, floored.z), value);
                 AddValueInChunk(new Vector3Int(ceiled.x, ceiled.y, ceiled.z), value);
                 AddValueInChunk(new Vector3Int(floored.x, ceiled.y, ceiled.z), value);
             }
-
             OnTerrainChanged?.Invoke(location);
         }
 
+        public void LoadChunk(Vector3Int chunkIndex)
+        {
+            var chunkPosition = new Vector3Int();
+            chunkPosition.x = chunkIndex.x * _chunkSize.x;
+            chunkPosition.y = chunkIndex.y * _chunkSize.y;
+            chunkPosition.z = chunkIndex.z * _chunkSize.z;
+
+            if (!_chunks.ContainsKey(chunkPosition))
+            {
+                _chunks[chunkPosition] = GenerateChunk(chunkPosition);
+            }
+        }
+        // Private methods
         private float ValueFromChunk(Vector3Int vector)
         {
             var divided = new Vector3();
@@ -121,18 +135,22 @@ namespace VoxelTerrains.ScalarField
             divided.x = (float)vector.x / _chunkSize.x;
             divided.y = (float)vector.y / _chunkSize.y;
             divided.z = (float)vector.z / _chunkSize.z;
-            var chunkIndex = Vector3Int.FloorToInt(divided);
-            chunkIndex.x *= _chunkSize.x;
-            chunkIndex.y *= _chunkSize.y;
-            chunkIndex.z *= _chunkSize.z;
-            var localVector = vector - chunkIndex;
 
-            if (!_chunks.ContainsKey(chunkIndex))
+            var chunkIndex = Vector3Int.FloorToInt(divided);
+
+            var chunkPosition = new Vector3Int();
+            chunkPosition.x = chunkIndex.x * _chunkSize.x;
+            chunkPosition.y = chunkIndex.x * _chunkSize.y;
+            chunkPosition.z = chunkIndex.x * _chunkSize.z;
+
+            var localVector = vector - chunkPosition;
+
+            if (!_chunks.ContainsKey(chunkPosition))
             {
-                _chunks[chunkIndex] = GenerateChunk(chunkIndex);
+                _chunks[chunkPosition] = GenerateChunk(chunkPosition);
             }
 
-            _chunks[chunkIndex].SetValueAt(localVector, Mathf.Clamp(_chunks[chunkIndex].ValueAt(localVector) + value, -1.0f, 1.0f));
+            _chunks[chunkPosition].SetValueAt(localVector, Mathf.Clamp(_chunks[chunkPosition].ValueAt(localVector) + value, -1.0f, 1.0f));
         }
 
         private Chunk GenerateChunk(Vector3Int chunkPosition)
@@ -144,7 +162,6 @@ namespace VoxelTerrains.ScalarField
                     {
                         data[x, y, z] = _worldGenerator.ValueAt(chunkPosition + new Vector3(x, y, z));
                     }
-
             return new Chunk(data);
         }
     }

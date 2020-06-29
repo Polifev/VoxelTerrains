@@ -11,7 +11,7 @@ namespace VoxelTerrains.ScalarField
     {
         public override float ValueAt(Vector3 vector)
         {
-            float height = Mathf.Sin( 2 * vector.x) * Mathf.Cos(2* vector.z);
+            float height = Mathf.Sin(vector.x / 16) * Mathf.Cos(vector.z / 16) * 16;
 
             return (vector.y > height) ? -1f : 1f;
         }

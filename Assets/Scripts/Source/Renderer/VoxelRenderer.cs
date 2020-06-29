@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -99,6 +100,11 @@ namespace VoxelTerrains.Renderer
             _meshCollider.sharedMesh = mesh;
         }
 
+        public bool isEmpty()
+        {
+            return _meshFilter.mesh.vertices.Length == 0;
+        }
+
         private int ComputeIndex(float x, float y, float z)
         {
             int index = 0;
@@ -165,7 +171,6 @@ namespace VoxelTerrains.Renderer
                             Gizmos.DrawSphere(v, 0.1f);
                         }
             }
-            
         }
     }
 }
