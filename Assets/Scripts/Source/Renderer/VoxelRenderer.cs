@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using VoxelTerrains.ScalarField;
-using VoxelTerrains.ScriptableObjects;
 
 namespace VoxelTerrains.Renderer
 {
     [ExecuteInEditMode]
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshCollider))]
-    public class VoxelRenderer : MonoBehaviour
+    public abstract class VoxelRenderer : MonoBehaviour
     {
         [SerializeField]
         private bool _debugMode = false;
         [SerializeField]
         private bool _realTime = false;
-        
-        [SerializeField]
-        private CubeConfigurations _configurations = null;
         [SerializeField, Range(0.001f, 10.0f)]
         private float _tileSize = 1.0f;
         [SerializeField]
@@ -40,10 +32,18 @@ namespace VoxelTerrains.Renderer
             set => _size = value;
         }
 
-        private MeshFilter _meshFilter = null;
-        private MeshCollider _meshCollider = null;
+        public float TileSize
+        {
+            get => _tileSize;
+            set => _tileSize = value;
+        }
 
-        public void Update()
+        protected MeshFilter MeshFilter { get; private set; } = null;
+        protected MeshCollider MeshCollider { get; private set; } = null;
+        protected bool DebugMode => _debugMode;
+        
+
+        private void Update()
         {
             if (_realTime)
             {
@@ -51,96 +51,15 @@ namespace VoxelTerrains.Renderer
             }
         }
 
-        public void RefreshMesh()
+        public virtual void RefreshMesh()
         {
-            _meshFilter = GetComponent<MeshFilter>();
-            _meshCollider = GetComponent<MeshCollider>();
-
-            IList<Vector3> vertices = new List<Vector3>();
-            IList<int> triangles = new List<int>();
-
-            IDictionary<Vector3, int> alreadyPresentVertices = new Dictionary<Vector3, int>();
-
-            for(float x = (-_size/2).x; x < (_size / 2).x; x += _tileSize)
-                for(float y = (-_size / 2).y; y < (_size / 2).y; y += _tileSize)
-                    for (float z = (-_size / 2).z; z < (_size / 2).z; z += _tileSize)
-                    {
-                        int configurationIndex = ComputeIndex(x + transform.position.x, y + transform.position.y, z + transform.position.z);
-                        var configuration = _configurations.Configurations[configurationIndex];
-                        for(int i = 0; i < configuration.Vertices.Length; i++)
-                        {
-                            var vertice = new Vector3(x, y, z) + (configuration.Vertices[i]) * _tileSize;
-                            if (!vertices.Contains(vertice))
-                            {
-                                var index = vertices.Count;
-                                vertices.Add(vertice);
-                                alreadyPresentVertices.Add(vertice, index);
-                            }
-                        }
-                        for (int i = 0; i < configuration.Triangles.Length; i++)
-                        {
-                            try
-                            {
-                                var correspondingVertice = new Vector3(x, y, z) + configuration.Vertices[configuration.Triangles[i]] * _tileSize;
-                                triangles.Add(alreadyPresentVertices[correspondingVertice]);
-                            }catch (Exception e)
-                            {
-                                Debug.LogError(e);
-                            }
-                            
-                        }
-                    }
-
-            Mesh mesh = new Mesh();
-            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
-            mesh.RecalculateNormals();
-            _meshFilter.sharedMesh = mesh;
-            _meshCollider.sharedMesh = mesh;
+            MeshFilter = GetComponent<MeshFilter>();
+            MeshCollider = GetComponent<MeshCollider>();
         }
 
         public bool isEmpty()
         {
-            return _meshFilter.mesh.vertices.Length == 0;
-        }
-
-        private int ComputeIndex(float x, float y, float z)
-        {
-            int index = 0;
-            if (_scalarField.ValueAt(new Vector3(x, y, z)) > 0f)
-            {
-                index += 1;
-            }
-            if (_scalarField.ValueAt(new Vector3(x + _tileSize, y, z)) > 0f)
-            {
-                index += 2;
-            }
-            if (_scalarField.ValueAt(new Vector3(x + _tileSize, y, z + _tileSize)) > 0f)
-            {
-                index += 4;
-            }
-            if (_scalarField.ValueAt(new Vector3(x, y, z + _tileSize)) > 0f)
-            {
-                index += 8;
-            }
-            if (_scalarField.ValueAt(new Vector3(x, y + _tileSize, z)) > 0f)
-            {
-                index += 16;
-            }
-            if (_scalarField.ValueAt(new Vector3(x + _tileSize, y + _tileSize, z)) > 0f)
-            {
-                index += 32;
-            }
-            if (_scalarField.ValueAt(new Vector3(x + _tileSize, y + _tileSize, z + _tileSize)) > 0f)
-            {
-                index += 64;
-            }
-            if (_scalarField.ValueAt(new Vector3(x, y + _tileSize, z + _tileSize)) > 0f)
-            {
-                index += 128;
-            }
-            return index;
+            return MeshFilter.mesh.vertices.Length == 0;
         }
 
         private void OnDrawGizmos()
@@ -148,7 +67,7 @@ namespace VoxelTerrains.Renderer
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(transform.position, _size);
 
-            if (_debugMode)
+            if (DebugMode)
             {
                 Handles.color = Color.red;
                 for(float x = -_size.x / 2; x < _size.x/2+1; x++)
