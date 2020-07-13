@@ -216,6 +216,50 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6729074538195977944}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &504951068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 504951070}
+  - component: {fileID: 504951069}
+  m_Layer: 0
+  m_Name: FlatWorldGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &504951069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504951068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1c167ba909a3d64386aeddf0388c3ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _height: 0
+--- !u!4 &504951070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504951068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ced75841f5938d04f90ffc3c3c7f5e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _worldGenerator: {fileID: 955350829}
+  _worldGenerator: {fileID: 504951069}
   _chunkSize: {x: 64, y: 64, z: 64}
 --- !u!4 &899083372
 Transform:
@@ -364,7 +408,7 @@ GameObject:
   - component: {fileID: 955350830}
   - component: {fileID: 955350829}
   m_Layer: 0
-  m_Name: WorldGenerator
+  m_Name: NoiseWorldGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,7 +427,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _highestValueAboveSeaLevel: 16
-  _deepestValueBelowSeaLevel: 8
+  _deepestValueBelowSeaLevel: 16
 --- !u!4 &955350830
 Transform:
   m_ObjectHideFlags: 0
@@ -490,7 +534,7 @@ RectTransform:
   m_Children:
   - {fileID: 1399631043}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -606,7 +650,7 @@ MonoBehaviour:
     type: 3}
   _voxelAgents:
   - {fileID: 496504563}
-  _allowedRenderPerFrame: 8
+  _allowedRenderPerFrame: 16
 --- !u!4 &1464881907
 Transform:
   m_ObjectHideFlags: 0
@@ -619,7 +663,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6729074538195977944
 PrefabInstance:

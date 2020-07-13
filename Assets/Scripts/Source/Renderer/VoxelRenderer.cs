@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using VoxelTerrains.ScalarField;
+using VoxelTerrains.ScriptableObjects;
 
 namespace VoxelTerrains.Renderer
 {
@@ -19,6 +20,8 @@ namespace VoxelTerrains.Renderer
         private Vector3 _size = Vector3.one;
         [SerializeField]
         private AbstractScalarField _scalarField = null;
+        [SerializeField]
+        private MeshConfigurations _configurations = null;
 
         public AbstractScalarField ScalarField
         {
@@ -40,6 +43,7 @@ namespace VoxelTerrains.Renderer
 
         protected MeshFilter MeshFilter { get; private set; } = null;
         protected MeshCollider MeshCollider { get; private set; } = null;
+        protected MeshConfigurations MeshConfigurations => _configurations;
         protected bool DebugMode => _debugMode;
         
 

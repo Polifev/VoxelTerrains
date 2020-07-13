@@ -9,9 +9,6 @@ namespace VoxelTerrains.Renderer
 {
     public class MarchingCubesRenderer : VoxelRenderer
     {
-        [SerializeField]
-        private CubeConfigurations _configurations = null;
-
         public override void RefreshMesh()
         {
             base.RefreshMesh();
@@ -25,11 +22,11 @@ namespace VoxelTerrains.Renderer
                     for (float z = (-Size / 2).z; z < (Size / 2).z; z += TileSize)
                     {
                         int configurationIndex = ComputeIndex(x + transform.position.x, y + transform.position.y, z + transform.position.z);
-                        var configuration = _configurations.Configurations[configurationIndex];
+                        var configuration = MeshConfigurations.Configurations[configurationIndex];
                         for (int i = 0; i < configuration.Vertices.Length; i++)
                         {
                             var vertice = new Vector3(x, y, z) + (configuration.Vertices[i]) * TileSize;
-                            if (!vertices.Contains(vertice))
+                            if (!alreadyPresentVertices.ContainsKey(vertice))
                             {
                                 var index = vertices.Count;
                                 vertices.Add(vertice);
@@ -38,16 +35,8 @@ namespace VoxelTerrains.Renderer
                         }
                         for (int i = 0; i < configuration.Triangles.Length; i++)
                         {
-                            try
-                            {
-                                var correspondingVertice = new Vector3(x, y, z) + configuration.Vertices[configuration.Triangles[i]] * TileSize;
-                                triangles.Add(alreadyPresentVertices[correspondingVertice]);
-                            }
-                            catch (Exception e)
-                            {
-                                Debug.LogError(e);
-                            }
-
+                            var correspondingVertice = new Vector3(x, y, z) + configuration.Vertices[configuration.Triangles[i]] * TileSize;
+                            triangles.Add(alreadyPresentVertices[correspondingVertice]);
                         }
                     }
 

@@ -13,7 +13,7 @@ namespace VoxelTerrains.Tests.ScriptableObjects
         public void LoadsRightNumberOfConfigurations()
         {
             var loader = new CsvCubeConfigurationsLoader();
-            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv");
+            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv", 256);
             Assert.AreEqual(256, cubeConfigurations.Length);
         }
 
@@ -21,7 +21,7 @@ namespace VoxelTerrains.Tests.ScriptableObjects
         public void LoadsEmptyConfigurationOnEmptyLines()
         {
             var loader = new CsvCubeConfigurationsLoader();
-            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv");
+            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv", 256);
             Assert.AreEqual(0, cubeConfigurations[0].Vertices.Length);
             Assert.AreEqual(0, cubeConfigurations[0].Triangles.Length);
         }
@@ -31,7 +31,7 @@ namespace VoxelTerrains.Tests.ScriptableObjects
         {
             // (0:0:0.5),(0:0.5:0),(0.5:1:0),(0.5:1:1),(0.5:0:1); 1,0,4,2,1,4,3,2,4
             var loader = new CsvCubeConfigurationsLoader();
-            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv");
+            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv", 256);
             Assert.AreEqual(5, cubeConfigurations[14].Vertices.Length);
 
             Assert.AreEqual(new Vector3(0f, 0f, 0.5f), cubeConfigurations[14].Vertices[0]);
@@ -46,7 +46,7 @@ namespace VoxelTerrains.Tests.ScriptableObjects
         {
             // (0:0:0.5),(0:0.5:0),(0.5:1:0),(0.5:1:1),(0.5:0:1); 1,0,4,2,1,4,3,2,4
             var loader = new CsvCubeConfigurationsLoader();
-            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv");
+            var cubeConfigurations = loader.LoadFromFile("./Assets/Scripts/Tests/TestData/TestImport_marchingCubesCases.csv", 256);
             Assert.AreEqual(9, cubeConfigurations[14].Triangles.Length);
 
             Assert.AreEqual(1, cubeConfigurations[14].Triangles[0]);

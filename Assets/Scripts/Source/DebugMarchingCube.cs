@@ -9,7 +9,7 @@ namespace VoxelTerrains
     public class DebugMarchingCube : MonoBehaviour
     {
         [SerializeField]
-        private CubeConfigurations _configurations = null;
+        private MeshConfigurations _configurations = null;
         [SerializeField, Range(0, 255)]
         private int _caseIndex = 0;
 

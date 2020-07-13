@@ -6,9 +6,9 @@ namespace VoxelTerrains.ScriptableObjects
 {
     public class CsvCubeConfigurationsLoader
     {
-        public CubeConfiguration[] LoadFromFile(string path)
+        public MeshConfiguration[] LoadFromFile(string path, int numberOfCases)
         {
-            var result = new CubeConfiguration[256];
+            var result = new MeshConfiguration[numberOfCases];
 
             using (var reader = new StreamReader(File.OpenRead(path)))
             {
@@ -16,7 +16,7 @@ namespace VoxelTerrains.ScriptableObjects
                 {
                     try
                     {
-                        CubeConfiguration config = new CubeConfiguration();
+                        MeshConfiguration config = new MeshConfiguration();
                         var line = reader.ReadLine();
                         var parts = line.Split(';');
                         if(parts.Length == 2)

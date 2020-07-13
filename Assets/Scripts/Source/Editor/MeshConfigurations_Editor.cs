@@ -6,10 +6,11 @@ using VoxelTerrains;
 using System.IO;
 using VoxelTerrains.ScriptableObjects;
 
-[CustomEditor(typeof(CubeConfigurations))]
-public class CubeConfigurations_Editor : Editor
+[CustomEditor(typeof(MeshConfigurations))]
+public class MeshConfigurations_Editor : Editor
 {
     private string _csvPath = "";
+    private int _numberOfCases = 256;
 
     public override void OnInspectorGUI()
     {
@@ -25,7 +26,9 @@ public class CubeConfigurations_Editor : Editor
         //    _csvPath = EditorUtility.OpenFilePanel("Load CSV configuration", "", "csv");
         //}
 
-        if (((CubeConfigurations)target).Configurations == null || ((CubeConfigurations)target).Configurations.Length == 0)
+        _numberOfCases = EditorGUILayout.IntField("Number of cases", _numberOfCases);
+
+        if (((MeshConfigurations)target).Configurations == null || ((MeshConfigurations)target).Configurations.Length == 0)
         {
             GUILayout.Label("<color=red>Please select a CSV configuration</color>", rich);
         }
@@ -38,7 +41,7 @@ public class CubeConfigurations_Editor : Editor
         {
             Undo.RecordObject(target, "Load new CSV");
             _csvPath = EditorUtility.OpenFilePanel("Load CSV configuration", "", "csv");
-            ((CubeConfigurations)target).Configurations = new CsvCubeConfigurationsLoader().LoadFromFile(_csvPath);
+            ((MeshConfigurations)target).Configurations = new CsvCubeConfigurationsLoader().LoadFromFile(_csvPath, _numberOfCases);
             EditorUtility.SetDirty(target);
         }
 

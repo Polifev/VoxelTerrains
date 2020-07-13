@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using VoxelTerrains.Renderer;
 
-[CustomEditor(typeof(VoxelRenderer))]
+[CustomEditor(typeof(VoxelRenderer), true)]
 public class VoxelRenderer_Editor : Editor
 {
     public override void OnInspectorGUI()

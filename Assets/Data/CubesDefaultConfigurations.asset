@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64520f71dc130244da81edb881715b9a, type: 3}
-  m_Name: DefaultConfigurations
+  m_Script: {fileID: 11500000, guid: fd92f4924ae5cc742aa743324b4977e1, type: 3}
+  m_Name: CubesDefaultConfigurations
   m_EditorClassIdentifier: 
   Configurations:
   - Vertices: []
