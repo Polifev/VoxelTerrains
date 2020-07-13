@@ -1028,7 +1028,7 @@ MonoBehaviour:
   persistance: 0.5
   offset: 0
   multifractaclA: 2
-  seed: 0
+  seed: 2429
   additionType: 0
   noiseType: 0
 --- !u!64 &2000622278
