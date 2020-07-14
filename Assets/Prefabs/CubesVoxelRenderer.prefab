@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1138715265252418047}
   - component: {fileID: 6494010660923198126}
   m_Layer: 10
-  m_Name: VoxelRenderer
+  m_Name: CubesVoxelRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1138715265252418042}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
