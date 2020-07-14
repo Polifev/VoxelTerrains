@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SkyboxPhysics
+  m_Shader: {fileID: 4800000, guid: 1d9b25ae367c54b4b9202850f85cb76e, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _StarMapTexture:
+        m_Texture: {fileID: 2800000, guid: 7297d7d0528eee64f8ff25215ff304a9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AtmosphereRadius: 6420000
+    - _LightSamples: 8
+    - _MieMultiplication: 0.5
+    - _MieScatteringCoefficient: 0.000021
+    - _MolecularDensityBlue: 0.00000331
+    - _MolecularDensityGreen: 0.00000135
+    - _MolecularDensityRed: 0.00000038
+    - _PlanetRadius: 6360000
+    - _RayleighMultiplication: 1
+    - _Samples: 16
+    - _ScaleHeightMie: 825
+    - _ScaleHeightRayleight: 7994
+    - _StarMapIntensity: 1
+    - _StarMapSpeed: 0.16
+    - _SunContrast: 5
+    - _SunFade: 0.35
+    - _SunIntensity: 20
+    - _SunSize: 2.5
+    m_Colors:
+    - _PosOffset: {r: 0, g: 0, b: 0, a: 0}
+    - _SunColor: {r: 1, g: 0.965, b: 0.93, a: 1}
