@@ -16,6 +16,8 @@ namespace VoxelTerrains.ScalarField
         [SerializeField]
         private float _radius = 1.0f;
 
+        public override event TerrainChangedEventHandler OnTerrainChanged;
+
         public override float ValueAt(Vector3 point)
         {
             return (point - _center).sqrMagnitude >= _radius * _radius ? -1.0f : 1.0f;

@@ -12,6 +12,8 @@ namespace VoxelTerrains.ScalarField
         [SerializeField]
         private float _height = 0.0f;
 
+        public override event TerrainChangedEventHandler OnTerrainChanged;
+
         public override float ValueAt(Vector3 point)
         {
             var result = 1.0f;

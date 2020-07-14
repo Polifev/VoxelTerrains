@@ -9,7 +9,7 @@ namespace VoxelTerrains.Tools
     public class Shovel : MonoBehaviour
     {
         [SerializeField]
-        private ChunkBasedScalarField _terrain = null;
+        private AbstractEditableScalarField _terrain = null;
         [SerializeField]
         private float _range = 25.0f;
         [SerializeField]

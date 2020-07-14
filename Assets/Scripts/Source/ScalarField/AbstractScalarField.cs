@@ -6,7 +6,7 @@ namespace VoxelTerrains.ScalarField
 
     public abstract class AbstractScalarField : MonoBehaviour
     {
+        public abstract event TerrainChangedEventHandler OnTerrainChanged;
         public abstract float ValueAt(Vector3 vector);
-        public virtual event TerrainChangedEventHandler OnTerrainChanged;
     }
 }

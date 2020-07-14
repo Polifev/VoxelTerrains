@@ -19,6 +19,8 @@ namespace VoxelTerrains.ScalarField
 
         private IDictionary<Vector2, float> _heightAtXZ = new Dictionary<Vector2, float>();
 
+        public override event TerrainChangedEventHandler OnTerrainChanged;
+
         public override float ValueAt(Vector3 vector)
         {
             var y = vector.y;

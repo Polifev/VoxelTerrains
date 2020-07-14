@@ -9,6 +9,8 @@ namespace VoxelTerrains.ScalarField
 {
     public class SinusoidScalarField : AbstractScalarField
     {
+        public override event TerrainChangedEventHandler OnTerrainChanged;
+
         public override float ValueAt(Vector3 vector)
         {
             float height = Mathf.Sin(vector.x / 16) * Mathf.Cos(vector.z / 16) * 16;

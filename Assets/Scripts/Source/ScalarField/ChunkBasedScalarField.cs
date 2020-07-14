@@ -9,7 +9,7 @@ using UnityEngine;
 namespace VoxelTerrains.ScalarField
 {
     [ExecuteInEditMode]
-    public class ChunkBasedScalarField : AbstractScalarField
+    public class ChunkBasedScalarField : AbstractEditableScalarField
     {
         // Private fields
         [SerializeField]
@@ -71,7 +71,7 @@ namespace VoxelTerrains.ScalarField
             return zInterpolation;
         }
 
-        public void AddValueAt(Vector3 location, float value)
+        public override void AddValueAt(Vector3 location, float value)
         {
             var floored = Vector3Int.FloorToInt(location);
             var ceiled = Vector3Int.CeilToInt(location);
