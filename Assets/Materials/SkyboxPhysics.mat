@@ -26,16 +26,16 @@ Material:
     m_Floats:
     - _AtmosphereRadius: 6420000
     - _LightSamples: 8
-    - _MieMultiplication: 0.5
-    - _MieScatteringCoefficient: 0.000021
+    - _MieMultiplication: 1
+    - _MieScatteringCoefficient: 0.0000103
     - _MolecularDensityBlue: 0.00000331
     - _MolecularDensityGreen: 0.00000135
     - _MolecularDensityRed: 0.00000038
     - _PlanetRadius: 6360000
-    - _RayleighMultiplication: 1
+    - _RayleighMultiplication: 2
     - _Samples: 16
-    - _ScaleHeightMie: 825
-    - _ScaleHeightRayleight: 7994
+    - _ScaleHeightMie: 800
+    - _ScaleHeightRayleight: 30000
     - _StarMapIntensity: 1
     - _StarMapSpeed: 0.16
     - _SunContrast: 5
