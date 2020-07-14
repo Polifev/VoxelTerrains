@@ -4,12 +4,17 @@ Shader "Voxel/FlatShaded"
 	{
 		_Gloss ("Glossiness", Range(0.0,1.0)) = 0.2
 		_Metalness ("Metalness", Range(0.0,1.0)) = 0.0
+		_FogDistance("_FogDistance", Range(0,500)) = 150
+		_FogMinHeight("_MinFogHeigth", Range(-256,256)) = 0
+		_FogMaxHeight("_MaxFogHeigth", Range(-256,256)) = 25
+		_FogOpacity("_FogOpacity", Range(0,1)) = 0.25
+		_FogColor("Fog Color", Color) = (0.97,0.97,1.0,1.0)
 	}
 	SubShader
 	{
 		Pass
 		{
-			Tags {"LightMode"="ForwardBase"}
+			Tags {"LightMode"="ForwardBase" "RenderType"="Opaque"}
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -19,7 +24,8 @@ Shader "Voxel/FlatShaded"
 			#include "Lighting.cginc"
 			#include "AutoLight.cginc"
 			
-			half _Gloss, _Metalness;
+			half _Gloss, _Metalness, _FogDistance, _FogMinHeight, _FogMaxHeight, _FogOpacity;
+			half3 _FogColor;
 
 			struct appData	
 			{
@@ -37,8 +43,9 @@ Shader "Voxel/FlatShaded"
 				half4 B_wPosY	: ATTR1;
 				half4 N_wPosZ	: ATTR2;
 				float2 UV		: ATTR3;
+				float4 UV_fog	: ATTR6;
 				nointerpolation half4 color : COLOR;
-				float3 wPos : ATTR6;
+				float3 wPos : ATTR7;
 				LIGHTING_COORDS(4, 5)
 			};
 
@@ -46,6 +53,7 @@ Shader "Voxel/FlatShaded"
 			{
 				v2f o;
 				o.UV = v.texcoord;
+				o.UV_fog.xy = v.texcoord;
 				o.color = v.color;	
 
 				o.pos = UnityObjectToClipPos (v.vertex);
@@ -57,6 +65,13 @@ Shader "Voxel/FlatShaded"
 				o.T_wPosX.w = o.wPos.x;
 				o.B_wPosY.w = o.wPos.y;
 				o.N_wPosZ.w = o.wPos.z;
+
+				o.UV_fog.z = saturate(distance(o.wPos,_WorldSpaceCameraPos)/_FogDistance);
+				o.UV_fog.z *= saturate((_FogMinHeight-o.wPos.y)/_FogMaxHeight);
+				o.UV_fog.z *= o.UV_fog.z;
+				o.UV_fog.w = dot(_WorldSpaceLightPos0,normalize(o.wPos-_WorldSpaceCameraPos))*.5+.5;
+				o.UV_fog.w *= o.UV_fog.w;
+				o.UV_fog.w *= o.UV_fog.w;
 				
 				TRANSFER_VERTEX_TO_FRAGMENT(o)
 				
@@ -120,6 +135,7 @@ Shader "Voxel/FlatShaded"
 				
 				//final compo
 				o.rgb = (diffuse + specular) * _LightColor0 * LIGHT_ATTENUATION(i) + ambSpec + ambient;
+				o.rgb = lerp(o.rgb, lerp(_FogColor.rgb,_LightColor0.rgb, i.UV_fog.w), i.UV_fog.z * _FogOpacity);
 				o.a = 1;
 				
 				return o;
