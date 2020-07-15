@@ -13,9 +13,10 @@ namespace VoxelTerrains.ScalarField
     {
         // Private fields
         [SerializeField]
-        private AbstractScalarField _worldGenerator = null;
-        [SerializeField]
-        private Vector3Int _chunkSize = Vector3Int.one * 16;
+        private ComputeShader _worldGenerator = null;
+        
+        private static Vector3Int ChunkSize = Vector3Int.one * 64;
+
         private IDictionary<Vector3Int, Chunk> _chunks = new ConcurrentDictionary<Vector3Int, Chunk>();
         
         // Events
@@ -98,8 +99,8 @@ namespace VoxelTerrains.ScalarField
         // Private methods
         private float ValueFromChunk(Vector3Int vector)
         {
-            var chunkIndex = Util.GetChunkIndex(vector, _chunkSize);
-            var chunkPosition = Util.MultiplyCoordsInt(chunkIndex, _chunkSize);
+            var chunkIndex = Util.GetChunkIndex(vector, ChunkSize);
+            var chunkPosition = Util.MultiplyCoordsInt(chunkIndex, ChunkSize);
             var localVector = vector - chunkPosition;
             if (!_chunks.ContainsKey(chunkIndex))
             {
@@ -110,8 +111,8 @@ namespace VoxelTerrains.ScalarField
 
         private void AddValueInChunk(Vector3Int vector, float value)
         {
-            var chunkIndex = Util.GetChunkIndex(vector, _chunkSize);
-            var chunkPosition = Util.MultiplyCoordsInt(chunkIndex, _chunkSize);
+            var chunkIndex = Util.GetChunkIndex(vector, ChunkSize);
+            var chunkPosition = Util.MultiplyCoordsInt(chunkIndex, ChunkSize);
             var localVector = vector - chunkPosition;
             if (!_chunks.ContainsKey(chunkIndex))
             {
@@ -122,14 +123,29 @@ namespace VoxelTerrains.ScalarField
 
         private Chunk GenerateChunk(Vector3Int chunkPosition)
         {
-            var data = new float[_chunkSize.x, _chunkSize.y, _chunkSize.z];
-            for(int x = 0; x < _chunkSize.x; x++)
-                for (int y = 0; y < _chunkSize.y; y++)
-                    for (int z = 0; z < _chunkSize.z; z++)
+            var bufferSize = ChunkSize.x * ChunkSize.y * ChunkSize.z;
+
+            ComputeBuffer cornersBuffer = new ComputeBuffer(bufferSize, sizeof(float) * 4);
+
+            _worldGenerator.SetBuffer(0, "corners", cornersBuffer);
+            _worldGenerator.SetVector("offset", new Vector4(chunkPosition.x, chunkPosition.y, chunkPosition.z, 0));
+            _worldGenerator.SetInts("size", new int[]{ ChunkSize.x, ChunkSize.y, ChunkSize.z});
+            _worldGenerator.Dispatch(0, 8, 8, 8);
+
+            var data = new Vector4[ChunkSize.x * ChunkSize.y * ChunkSize.z];
+            cornersBuffer.GetData(data);
+
+            var chunkData = new float[ChunkSize.x, ChunkSize.y, ChunkSize.z];
+            for (int x = 0; x < ChunkSize.x; x++)
+                for (int y = 0; y < ChunkSize.y; y++)
+                    for (int z = 0; z < ChunkSize.z; z++)
                     {
-                        data[x, y, z] = _worldGenerator.ValueAt(chunkPosition + new Vector3(x, y, z));
+                        chunkData[x, y, z] = data[x * 64 * 64 + y * 64 + z].w;
                     }
-            return new Chunk(data);
+
+            cornersBuffer.Release();
+
+            return new Chunk(chunkData);
         }
     }
 }
