@@ -27,7 +27,7 @@ using UnityScript.Scripting.Pipeline;
 
 namespace VoxelTerrains.Noise
 {
-    public class OpenSimplexNoise : iNoise
+    public class OpenSimplexNoise
     {
 		private static float STRETCH_CONSTANT_2D = -0.211324865405187f;    //(1/Math.sqrt(2+1)-1)/2;
 		private static float SQUISH_CONSTANT_2D = 0.366025403784439f;      //(Math.sqrt(2+1)-1)/2;

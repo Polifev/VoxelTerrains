@@ -3,19 +3,17 @@ using VoxelTerrains.Model;
 
 namespace VoxelTerrains.Renderer
 {
-    [ExecuteInEditMode]
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshCollider))]
     public class ChunkRenderer : MonoBehaviour
     {
         [SerializeField]
-        private ComputeShader _renderingShader;
+        private ComputeShader _renderingShader = null;
         private MeshFilter _meshFilter = null;
         private MeshCollider _meshCollider = null;
 
         public bool Empty { get; private set; } = false;
         public ChunkProvider World { get; set; } = null;
-        public ComputeShader RenderingShader { get => _renderingShader; set => _renderingShader = value; }
         public float Scale { get; set; } = 1.0f;
         
         private void Awake()
@@ -48,7 +46,6 @@ namespace VoxelTerrains.Renderer
 
             World.FillBuffer(chunkIndex, cornersBuffer);
             
-
             _renderingShader.SetBuffer(0, "corners", cornersBuffer);
             _renderingShader.SetBuffer(0, "triangles", trianglesBuffer);
             _renderingShader.SetFloat("scale", Scale);
@@ -79,25 +76,20 @@ namespace VoxelTerrains.Renderer
             }
 
             Mesh mesh = new Mesh();
-            //mesh.name = "Chunk " + chunkIndex.ToString();
+            mesh.name = "Chunk " + chunkIndex.ToString();
 
             mesh.vertices = meshVertices;
             mesh.triangles = meshTriangles;
             mesh.RecalculateNormals();
 
             _meshFilter.mesh = mesh;
-            //_meshCollider.sharedMesh = mesh;
+            _meshCollider.sharedMesh = mesh;
 
             trianglesBuffer.Release();
             trianglesCountBuffer.Release();
             cornersBuffer.Release();
 
             Empty = meshVertices.Length <= 0;
-        }
-
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.DrawWireMesh(_meshFilter.mesh);
         }
     }
 }

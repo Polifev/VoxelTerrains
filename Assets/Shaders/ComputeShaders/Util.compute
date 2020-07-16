@@ -1,0 +1,20 @@
+﻿#define CHUNK_SIZE 64
+
+struct Triangle
+{
+    float3 a;
+    float3 b;
+    float3 c;
+};
+
+uint indexFromCoords(uint x, uint y, uint z)
+{
+    return z + y * CHUNK_SIZE + x * CHUNK_SIZE * CHUNK_SIZE;
+}
+
+uint indexFromCoords(uint3 id)
+{
+    return indexFromCoords(id.x, id.y, id.z);
+
+}
+

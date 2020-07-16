@@ -1,29 +1,20 @@
 ﻿// Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel MarchingCubes
+#include "Util.compute"
 #include "MarchingCubesTable.compute"
-
-struct Triangle {
-    float3 a;
-    float3 b;
-    float3 c;
-};
 
 AppendStructuredBuffer<Triangle> triangles;
 RWStructuredBuffer<float> corners;
 float scale;
 
-int indexFromCoords(int x, int y, int z) {
-    return z + y * 64 + x * 64 * 64;
-}
-
 float3 caseToRealWorld(float3 vertice, uint3 id) {
-    return (vertice + id) / 63 * 64;
+    return (vertice + id) / (CHUNK_SIZE - 1) * CHUNK_SIZE;
 }
 
 [numthreads(8,8,8)]
 void MarchingCubes(uint3 id : SV_DispatchThreadID)
 {
-	if (id.x >= 64-1 || id.y >= 64-1 || id.z >= 64-1)
+    if (id.x >= CHUNK_SIZE - 1 || id.y >= CHUNK_SIZE - 1 || id.z >= CHUNK_SIZE - 1)
 	{
 		return;
 	}

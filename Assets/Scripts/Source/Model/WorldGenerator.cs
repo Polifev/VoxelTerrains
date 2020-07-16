@@ -13,7 +13,7 @@ namespace VoxelTerrains.Model
             ComputeBuffer chunkBuffer = new ComputeBuffer(bufferSize, sizeof(float));
 
             GeneratorShader.SetBuffer(0, "chunk", chunkBuffer);
-            GeneratorShader.SetVector("chunkPosition", (Vector3)chunkIndex * (Chunk.SIZE));
+            GeneratorShader.SetVector("chunkPosition", (Vector3)chunkIndex * (Chunk.SIZE - 1));
             GeneratorShader.Dispatch(0, 8, 8, 8);
 
             var data = new float[bufferSize];

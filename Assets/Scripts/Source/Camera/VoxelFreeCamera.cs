@@ -10,7 +10,7 @@ namespace VoxelTerrains.Camera
 {
     public class VoxelFreeCamera : MonoBehaviour
     {
-        [SerializeField] private float movementSpeed = 10f;
+        [SerializeField] private float movementSpeed = 11f;
         [SerializeField] private float rotationSpeed = 30f;
         [SerializeField] private Vector2 clampVerticalRotation = new Vector2(-90f, 90f);
 

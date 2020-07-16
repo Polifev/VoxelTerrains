@@ -122,30 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &37477059 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6729074537807555497, guid: c5fa53458c80d1d458b7576205495a9a,
-    type: 3}
-  m_PrefabInstance: {fileID: 6729074538195977944}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &37477067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 37477059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe71e90641377784f8442b2768339f62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _terrain: {fileID: 0}
-  _range: 100
-  _strength: 10
-  _voxelMask:
-    serializedVersion: 2
-    m_Bits: 1024
 --- !u!4 &496504563 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6729074538130670641, guid: c5fa53458c80d1d458b7576205495a9a,
@@ -447,7 +423,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _generatorShader: {fileID: 7200000, guid: 2493adaebf9fe6f40be2d052ea4c47da, type: 3}
-  _renderingShader: {fileID: 7200000, guid: f96f39d9206749b4bbc9b8b6ead57a73, type: 3}
   _voxelRendererPrefab: {fileID: 4654376844978333738, guid: 999e37a1453722542afc088aae48d248,
     type: 3}
   _voxelAgents:
@@ -513,7 +488,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 37477067}
+      objectReference: {fileID: 0}
     - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -548,7 +523,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 37477067}
+      objectReference: {fileID: 0}
     - target: {fileID: 6729074537807555488, guid: c5fa53458c80d1d458b7576205495a9a,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[4].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
