@@ -3,19 +3,18 @@
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
-RWStructuredBuffer<float4> corners;
-float3 offset;
-uint size[3];
+RWStructuredBuffer<float> chunk;
+float3 chunkPosition;
 
-uint getIndex(uint3 id, uint size[3])
+uint getIndex(uint3 id)
 {
     return id.x * 64 * 64  + id.y * 64 + id.z;
 }
 
-float sphere(uint3 id, float3 offset, float radius)
+float sphere(uint3 id, float3 chunkPosition, float radius)
 {
-    float3 pt = id + offset;
-    if (length(pt) < 16)
+    float3 pt = id + chunkPosition;
+    if (length(pt) < radius)
     {
         return 1.0;
     }
@@ -25,8 +24,7 @@ float sphere(uint3 id, float3 offset, float radius)
 [numthreads(8,8,8)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    uint index = getIndex(id, size);
-    float4 value = float4(0, 0, 0, 0);
-    value.w = sphere(id, offset, 4);
-    corners[index] = value;
+    uint index = getIndex(id);
+    float value = sphere(id, chunkPosition, 32);
+    chunk[index] = value;
 }

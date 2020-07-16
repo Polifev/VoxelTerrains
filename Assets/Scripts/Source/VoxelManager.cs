@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using VoxelTerrains.Model;
 using VoxelTerrains.Renderer;
 using VoxelTerrains.ScalarField;
 
@@ -10,9 +11,9 @@ namespace VoxelTerrains
     public class VoxelManager : MonoBehaviour
     {
         [SerializeField]
-        private AbstractScalarField _terrain = null;
+        private ComputeShader _generatorShader = null;
         [SerializeField]
-        private int _rendererSize = 4;
+        private ComputeShader _renderingShader = null;
         [SerializeField]
         private GameObject _voxelRendererPrefab = null;
         [SerializeField]
@@ -20,44 +21,63 @@ namespace VoxelTerrains
         [SerializeField]
         private int _allowedRenderPerFrame = 1;
 
-
+        private WorldGenerator _worldGenerator = null;
+        private ChunkProvider _world = null;
         private Dictionary<Vector3Int, GameObject> _renderers = new Dictionary<Vector3Int, GameObject>();
         private Coroutine[] _agentRenderingCoroutines = new Coroutine[0];
         private Vector3Int[] _agentChunkIndices = new Vector3Int[0];
 
         private void Start()
         {
-            
-            _terrain.OnTerrainChanged += RenderChunksAround;
+            _worldGenerator = new WorldGenerator();
+            _worldGenerator.GeneratorShader = _generatorShader;
+            _world = new ChunkProvider(_worldGenerator);
 
             // Start a coroutine that will show progressively the terrain to each agent
-            _agentRenderingCoroutines = new Coroutine[_voxelAgents.Length];
+            /*_agentRenderingCoroutines = new Coroutine[_voxelAgents.Length];
             _agentChunkIndices = new Vector3Int[_voxelAgents.Length];
             for (int i = 0; i < _voxelAgents.Length; i++)
             {
                 var agent = _voxelAgents[i];
-                var chunkIndex = Util.GetChunkIndex(agent.position, Vector3Int.one * _rendererSize);
+                var chunkIndex = Util.GetChunkIndex(agent.position, Vector3Int.one * Chunk.SIZE);
                 _agentChunkIndices[i] = chunkIndex;
                 _agentRenderingCoroutines[i] = StartCoroutine(SpawnRenderersCoroutine(chunkIndex));
-            }
+            }*/
+            var chunkIndex = Util.GetChunkIndex(_voxelAgents[0].position, Vector3Int.one * 64);
+            foreach (var spiral in Util.GetSquaredSpiral(4))
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    for (int j = 0; j < 2; j++)
+                    {
+                        // TPACPC: c'est normal d'ajouter y à l'axe Z (la spirale se génère en 2d)
+                        var temp = new Vector3Int(
+                            chunkIndex.x + spiral.x,
+                            chunkIndex.y + ((j == 0) ? i : -i),
+                            chunkIndex.z + spiral.y);
 
-            // Start a thread that will generate chunk data around player position
+                        if (!_renderers.ContainsKey(temp))
+                        {
+                            InstantiateAndRender(temp);
+                        }
+                    }
+                }
+            }
         }
 
         private void Update()
         {
-            for(int i = 0; i < _voxelAgents.Length; i++)
+            /*for(int i = 0; i < _voxelAgents.Length; i++)
             {
                 var agent = _voxelAgents[i];
-                var chunkIndex = Util.GetChunkIndex(agent.position, Vector3Int.one * _rendererSize);
+                var chunkIndex = Util.GetChunkIndex(agent.position, Vector3Int.one * Chunk.SIZE);
                 if(chunkIndex != _agentChunkIndices[i])
                 {
                     _agentChunkIndices[i] = chunkIndex;
                     StopCoroutine(_agentRenderingCoroutines[i]);
                     _agentRenderingCoroutines[i] = StartCoroutine(SpawnRenderersCoroutine(chunkIndex));
                 }
-                
-            }
+            }*/
         }
 
         private IEnumerator SpawnRenderersCoroutine(Vector3Int chunkIndex)
@@ -96,7 +116,7 @@ namespace VoxelTerrains
 
         private void RenderChunksAround(Vector3 location)
         {
-            Vector3Int centerIndex = Util.GetChunkIndex(location, Vector3Int.one * _rendererSize);
+            Vector3Int centerIndex = Util.GetChunkIndex(location, Vector3Int.one * Chunk.SIZE);
 
             IList<Vector3Int> updateIndexes = new List<Vector3Int>();
             updateIndexes.Add(centerIndex);
@@ -149,20 +169,21 @@ namespace VoxelTerrains
             }
 
             var instance = _renderers[rendererIndex];
-            var renderer = instance.GetComponent<VoxelRenderer>();
+            var renderer = instance.GetComponent<ChunkRenderer>();
 
             renderer.RefreshMesh();
-            instance.SetActive(!renderer.isEmpty());
+            instance.SetActive(!renderer.Empty);
         }
 
-        private VoxelRenderer InstantiateRenderer(Vector3Int index)
+        private ChunkRenderer InstantiateRenderer(Vector3Int index)
         {
             var instance = Instantiate(_voxelRendererPrefab, this.transform);
-            instance.transform.Translate(index * _rendererSize);
+            instance.transform.Translate(index * Chunk.SIZE);
 
-            var renderer = instance.GetComponent<VoxelRenderer>();
-            renderer.ScalarField = _terrain;
-            renderer.Size = Vector3.one * _rendererSize;
+            var renderer = instance.GetComponent<ChunkRenderer>();
+            renderer.World = _world;
+            renderer.RenderingShader = _renderingShader;
+            // TODO set scale
 
             _renderers.Add(index, instance);
             return renderer;

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4654376844978333741}
   - component: {fileID: 4654376844978333739}
   - component: {fileID: 4654376844978333743}
-  - component: {fileID: 6671621308927107084}
+  - component: {fileID: 6461084797052478209}
   m_Layer: 10
-  m_Name: GPUVoxelRenderer 1
+  m_Name: GPUVoxelRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4654376844978333738}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -95,7 +95,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: -1
   m_Mesh: {fileID: 0}
---- !u!114 &6671621308927107084
+--- !u!114 &6461084797052478209
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,14 +104,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4654376844978333738}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a61e4815acfd40545a119a22740891ac, type: 3}
+  m_Script: {fileID: 11500000, guid: 689b20781209a044c82c8a5f5bea64fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugMode: 0
-  _realTime: 0
-  _tileSize: 1
-  _size: {x: 64, y: 64, z: 64}
-  _scalarField: {fileID: 0}
-  _configurations: {fileID: 11400000, guid: 9651f95a8a1584347966b25996e78ac8, type: 2}
-  _marchingCubesShader: {fileID: 7200000, guid: f96f39d9206749b4bbc9b8b6ead57a73,
-    type: 3}
+  _renderingShader: {fileID: 7200000, guid: f96f39d9206749b4bbc9b8b6ead57a73, type: 3}

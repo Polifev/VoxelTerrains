@@ -3,51 +3,32 @@
 #include "MarchingCubesTable.compute"
 
 struct Triangle {
-    float3 one;
-    float3 two;
-    float3 three;
+    float3 a;
+    float3 b;
+    float3 c;
 };
 
 AppendStructuredBuffer<Triangle> triangles;
-RWStructuredBuffer<float4> corners;
-
-uint numberCornersX, numberCornersY, numberCornersZ;
-
-float tileSize;
-float3 rendererSize;
-float3 offset;
-
+RWStructuredBuffer<float> corners;
+float scale;
 
 int indexFromCoords(int x, int y, int z) {
-    return z + y * numberCornersZ + x * numberCornersY * numberCornersZ;
+    return z + y * 64 + x * 64 * 64;
 }
 
 float3 caseToRealWorld(float3 vertice, uint3 id) {
-    vertice *= tileSize;
-    return vertice + ((id) * tileSize) - (rendererSize * 0.5);
-}
-
-float4 sphereValue(float3 coords)
-{
-	if (length(coords)  > 4.0)
-	{
-		return float4(0.0, 0.0, 0.0, -1.0);
-	}
-	return float4(0.0, 0.0, 0.0, 1.0);
+    return (vertice + id) / 63 * 64;
 }
 
 [numthreads(8,8,8)]
-
-	void MarchingCubes
-	(
-	uint3 id : SV_DispatchThreadID)
+void MarchingCubes(uint3 id : SV_DispatchThreadID)
 {
-	if (id.x >= numberCornersX - 1 || id.y >= numberCornersY - 1 || id.z >= numberCornersZ - 1)
+	if (id.x >= 64-1 || id.y >= 64-1 || id.z >= 64-1)
 	{
 		return;
 	}
 
-	float4 cubeCorners[8] =
+	float cubeCorners[8] =
 	{
 		corners[indexFromCoords(id.x, id.y, id.z)],
 		corners[indexFromCoords(id.x + 1, id.y, id.z)],
@@ -60,21 +41,21 @@ float4 sphereValue(float3 coords)
 	};
 
 	int caseIndex = 0;
-	if (cubeCorners[0].w > 0.0)
+	if (cubeCorners[0] > 0.0)
 		caseIndex += 1;
-	if (cubeCorners[1].w > 0.0)
+	if (cubeCorners[1] > 0.0)
 		caseIndex += 2;
-	if (cubeCorners[2].w > 0.0)
+	if (cubeCorners[2] > 0.0)
 		caseIndex += 4;
-	if (cubeCorners[3].w > 0.0)
+	if (cubeCorners[3] > 0.0)
 		caseIndex += 8;
-	if (cubeCorners[4].w > 0.0)
+	if (cubeCorners[4] > 0.0)
 		caseIndex += 16;
-	if (cubeCorners[5].w > 0.0)
+	if (cubeCorners[5] > 0.0)
 		caseIndex += 32;
-	if (cubeCorners[6].w > 0.0)
+	if (cubeCorners[6] > 0.0)
 		caseIndex += 64;
-	if (cubeCorners[7].w > 0.0)
+	if (cubeCorners[7] > 0.0)
 		caseIndex += 128;
 
 	float3 mCCase[15] = configurations[caseIndex];
@@ -87,27 +68,16 @@ float4 sphereValue(float3 coords)
 			break;
 		}
 
-		float3 one = mCCase[i];
-		float3 two = mCCase[i + 1];
-		float3 three = mCCase[i + 2];
+		float3 a = mCCase[i];
+		float3 b = mCCase[i + 1];
+		float3 c = mCCase[i + 2];
 
 		Triangle tri;
 
-		tri.one = caseToRealWorld(one, id);
-		tri.two = caseToRealWorld(two, id);
-		tri.three = caseToRealWorld(three, id);
+		tri.a = caseToRealWorld(a, id);
+		tri.b = caseToRealWorld(b, id);
+		tri.c = caseToRealWorld(c, id);
 
 		triangles.Append(tri);
 	}
-	
-	/*if (id.x == 0 && id.y == 0 && id.z == 0)
-	{
-		Triangle tri;
-
-		tri.one = float3(0, 0, 0);
-		tri.two = float3(0, 15, 0);
-		tri.three = float3(15, 0, 0);
-
-		triangles.Append(tri);
-	}*/
 }
