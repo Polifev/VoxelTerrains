@@ -73,8 +73,8 @@ SubShader {
         half rayleighScattering(half height, half wavelength, half molecularDensity)
         {
             //βsR(h,λ)=((8πe3*(ne2−1)e2)/(3Nλe4))e(−h/Hr)  I subtitute 8π3 by it'result to speed up
-            half bsr = pow((15875.21366 * pow(pow(AIRREFRACTION, 2.0) - 1.0, 2.0))
-                        / (pow(3.0 * molecularDensity * wavelength, 4.0))
+            half bsr = pow((15875.21366 * ((AIRREFRACTION * AIRREFRACTION - 1.0)*(AIRREFRACTION * AIRREFRACTION - 1.0)))
+                        / (((3.0 * molecularDensity * wavelength)*(3.0 * molecularDensity * wavelength))*((3.0 * molecularDensity * wavelength)*(3.0 * molecularDensity * wavelength)))
                         , -(height / _ScaleHeightRayleight));
             return bsr;
         }
