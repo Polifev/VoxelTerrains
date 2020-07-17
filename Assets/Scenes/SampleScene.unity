@@ -427,7 +427,9 @@ MonoBehaviour:
     type: 3}
   _voxelAgents:
   - {fileID: 496504563}
-  _allowedRenderPerFrame: 1
+  _allowedRenderPerFrame: 4
+  _agentsSpiralSize: 8
+  _agentsSpiralHalfHeight: 6
 --- !u!4 &1464881907
 Transform:
   m_ObjectHideFlags: 0

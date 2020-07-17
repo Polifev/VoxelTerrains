@@ -15,14 +15,19 @@ namespace VoxelTerrains
         private GameObject _voxelRendererPrefab = null;
         [SerializeField]
         private Transform[] _voxelAgents = new Transform[0];
+        
         [SerializeField]
         private int _allowedRenderPerFrame = 1;
+        [SerializeField]
+        private int _agentsSpiralSize = 4;
+        [SerializeField]
+        private int _agentsSpiralHalfHeight = 2;
 
         private WorldGenerator _worldGenerator = null;
         private ChunkProvider _world = null;
         private Dictionary<Vector3Int, GameObject> _renderers = new Dictionary<Vector3Int, GameObject>();
-        private Coroutine[] _agentRenderingCoroutines = new Coroutine[0];
-        private Vector3Int[] _agentChunkIndices = new Vector3Int[0];
+        private Coroutine[] _agentRenderingCoroutines = null;
+        private Vector3Int[] _agentChunkIndices = null;
 
         private void Start()
         {
@@ -59,32 +64,35 @@ namespace VoxelTerrains
 
         private IEnumerator SpawnRenderersCoroutine(Vector3Int chunkIndex)
         {
-            int count = 0;
+            int notRenderingCount = 0;
+            int renderingCount = 0;
             while (true)
             {
-                foreach (var spiral in Util.GetSquaredSpiral(int.MaxValue))
+                foreach (var spiral in Util.GetSquaredSpiral(_agentsSpiralSize))
                 {
-                    for (int i = 0; i < 8; i++)
+                    for (int i = -_agentsSpiralHalfHeight; i < _agentsSpiralHalfHeight; i++)
                     {
-                        for (int j = 0; j < 2; j++)
+                        // TPACPC: c'est normal d'ajouter y à l'axe Z (la spirale se génère en 2d)
+                        var temp = new Vector3Int(
+                            chunkIndex.x + spiral.x,
+                            chunkIndex.y + i,
+                            chunkIndex.z + spiral.y);
+
+                        if (!_renderers.ContainsKey(temp))
                         {
-                            // TPACPC: c'est normal d'ajouter y à l'axe Z (la spirale se génère en 2d)
-                            var temp = new Vector3Int(
-                                chunkIndex.x + spiral.x,
-                                chunkIndex.y + ((j == 0) ? i : -i),
-                                chunkIndex.z + spiral.y);
+                            renderingCount++;
+                            InstantiateAndRender(temp);
+                        }
+                        else
+                        {
+                            notRenderingCount++;
+                        }
 
-                            if (!_renderers.ContainsKey(temp))
-                            {
-                                count++;
-                                InstantiateAndRender(temp);
-                            }
-
-                            if (count >= _allowedRenderPerFrame / _voxelAgents.Length)
-                            {
-                                count = 0;
-                                yield return new WaitForEndOfFrame();
-                            }
+                        if (renderingCount >= _allowedRenderPerFrame / _voxelAgents.Length || notRenderingCount >= _allowedRenderPerFrame * 60 / _voxelAgents.Length)
+                        {
+                            renderingCount = 0;
+                            notRenderingCount = 0;
+                            yield return new WaitForEndOfFrame();
                         }
                     }
                 }
