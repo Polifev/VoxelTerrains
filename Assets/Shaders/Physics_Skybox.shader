@@ -6,7 +6,7 @@ Properties {
     [NoScaleOffset] _StarMapTexture ("Star Map Texture", 2D) = "black" {}
     _StarMapIntensity ("Star Map Intensity", Range(0,10)) = 1.0
     _StarMapSpeed ("Star Map Speed", Range(-3,3)) = 0.25
-    _SunColor("Sun Color", Color) = (1.0,0.965,0.93,1.0)
+    [HDR] _SunColor("Sun Color", Color) = (1.0,0.965,0.93,1.0)
     _SunIntensity ("Sun Intensity", Int) = 20
     _SunSize("Sun Size", Range(0.0,5.0)) = 2.0
     _SunFade("Sun Fade", Range(0.0,1.0)) = 0.5

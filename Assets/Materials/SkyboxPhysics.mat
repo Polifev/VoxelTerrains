@@ -26,7 +26,7 @@ Material:
     m_Floats:
     - _AtmosphereRadius: 6420000
     - _LightSamples: 8
-    - _MieMultiplication: 1
+    - _MieMultiplication: 1.5
     - _MieScatteringCoefficient: 0.0000103
     - _MolecularDensityBlue: 0.00000331
     - _MolecularDensityGreen: 0.00000135
@@ -44,4 +44,4 @@ Material:
     - _SunSize: 2.5
     m_Colors:
     - _PosOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _SunColor: {r: 1, g: 0.965, b: 0.93, a: 1}
+    - _SunColor: {r: 4, g: 3.8588235, b: 3.717647, a: 1}
