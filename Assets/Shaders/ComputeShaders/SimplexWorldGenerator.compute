@@ -1,0 +1,72 @@
+﻿#pragma kernel CSMain
+#include "Util.compute"
+
+RWStructuredBuffer<float> chunk;
+float3 chunkPosition;
+
+float scale = 1.0;
+float lacunarity = 2.0;
+float persistance = 0.5;
+uint octave = 6;
+uint seed = 0;
+
+float4 hash(float4 position)
+{
+    position = float4(dot(position, float4(127.1, 311.7, 474.7, 14.1658)),
+        dot(position, float4(269.5, 183.3, 246.1, 68.1487)),
+        dot(position, float4(113.5, 271.9, 124.6, 17.1684)),
+        dot(position, float4(113.5, 271.9, 124.6, 49.4784)));
+
+    return -1.0 + 2.0 * frac(sin(position) * 43758.5453123 + frac((seed + 1.0) * 15613.5741));
+}
+
+float noise4d(float4 position)
+{
+    position *= scale;
+    float4 cell = floor(position);
+    float4 decimal = frac(position);
+
+    float4 lerpValue = decimal * decimal * (3.0 - 2.0 * decimal);
+
+    float noise = lerp(lerp(lerp(lerp(dot(hash(cell + float4(0.0, 0.0, 0.0, 0.0)), decimal - float4(0.0, 0.0, 0.0, 0.0)),
+        dot(hash(cell + float4(1.0, 0.0, 0.0, 0.0)), decimal - float4(1.0, 0.0, 0.0, 0.0)), lerpValue.x),
+        lerp(dot(hash(cell + float4(0.0, 1.0, 0.0, 0.0)), decimal - float4(0.0, 1.0, 0.0, 0.0)),
+            dot(hash(cell + float4(1.0, 1.0, 0.0, 0.0)), decimal - float4(1.0, 1.0, 0.0, 0.0)), lerpValue.x), lerpValue.y),
+        lerp(lerp(dot(hash(cell + float4(0.0, 0.0, 1.0, 0.0)), decimal - float4(0.0, 0.0, 1.0, 0.0)),
+            dot(hash(cell + float4(1.0, 0.0, 1.0, 0.0)), decimal - float4(1.0, 0.0, 1.0, 0.0)), lerpValue.x),
+            lerp(dot(hash(cell + float4(0.0, 1.0, 1.0, 0.0)), decimal - float4(0.0, 1.0, 1.0, 0.0)),
+                dot(hash(cell + float4(1.0, 1.0, 1.0, 0.0)), decimal - float4(1.0, 1.0, 1.0, 0.0)), lerpValue.x), lerpValue.y), lerpValue.z),
+        lerp(lerp(lerp(dot(hash(cell + float4(0.0, 0.0, 0.0, 1.0)), decimal - float4(0.0, 0.0, 0.0, 1.0)),
+            dot(hash(cell + float4(1.0, 0.0, 0.0, 1.0)), decimal - float4(1.0, 0.0, 0.0, 1.0)), lerpValue.x),
+            lerp(dot(hash(cell + float4(0.0, 1.0, 0.0, 1.0)), decimal - float4(0.0, 1.0, 0.0, 1.0)),
+                dot(hash(cell + float4(1.0, 1.0, 0.0, 1.0)), decimal - float4(1.0, 1.0, 0.0, 1.0)), lerpValue.x), lerpValue.y),
+            lerp(lerp(dot(hash(cell + float4(0.0, 0.0, 1.0, 1.0)), decimal - float4(0.0, 0.0, 1.0, 1.0)),
+                dot(hash(cell + float4(1.0, 0.0, 1.0, 1.0)), decimal - float4(1.0, 0.0, 1.0, 1.0)), lerpValue.x),
+                lerp(dot(hash(cell + float4(0.0, 1.0, 1.0, 1.0)), decimal - float4(0.0, 1.0, 1.0, 1.0)),
+                    dot(hash(cell + float4(1.0, 1.0, 1.0, 1.0)), decimal - float4(1.0, 1.0, 1.0, 1.0)), lerpValue.x), lerpValue.y), lerpValue.z), lerpValue.w);
+    return (noise) * 2.0;
+}
+
+
+float simplex(float4 position) {
+    float noise = 0.0;
+    float increment = 0.0;
+
+    for (uint j = 0; j < octave; j++)
+    {
+        float frequency = pow(abs(lacunarity), j);
+        float amplitude = pow(abs(persistance), j);
+        float currentOctave = noise4d(position * frequency) * amplitude;
+        noise = noise + currentOctave;
+        increment += amplitude;
+    }
+    return (noise / increment);
+}
+
+[numthreads(8,8,8)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    uint index = indexFromCoords(id);
+    float value = simplex(float4(id + chunkPosition, 0.0));
+    chunk[index] = value;
+}

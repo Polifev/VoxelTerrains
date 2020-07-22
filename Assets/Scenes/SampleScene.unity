@@ -422,13 +422,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b5c8fe2bae9a643bc1a77ead54e438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _generatorShader: {fileID: 7200000, guid: 2493adaebf9fe6f40be2d052ea4c47da, type: 3}
+  _generatorShader: {fileID: 7200000, guid: 59697428e6f671640838fe3e6e111037, type: 3}
   _voxelRendererPrefab: {fileID: 4654376844978333738, guid: 999e37a1453722542afc088aae48d248,
     type: 3}
   _voxelAgents:
   - {fileID: 496504563}
-  _allowedRenderPerFrame: 4
-  _agentsSpiralSize: 8
+  _allowedRenderPerFrame: 1
+  _agentsSpiralSize: 16
   _agentsSpiralHalfHeight: 6
 --- !u!4 &1464881907
 Transform:

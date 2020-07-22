@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using VoxelTerrains.Model;
 
 namespace VoxelTerrains.Renderer
@@ -75,8 +76,10 @@ namespace VoxelTerrains.Renderer
                 meshTriangles[triple + 2] = triple + 2;
             }
 
-            Mesh mesh = new Mesh();
+            Mesh mesh = _meshFilter.mesh ?? new Mesh();
+            mesh.Clear();
             mesh.name = "Chunk " + chunkIndex.ToString();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
 
             mesh.vertices = meshVertices;
             mesh.triangles = meshTriangles;
@@ -90,6 +93,13 @@ namespace VoxelTerrains.Renderer
             cornersBuffer.Release();
 
             Empty = meshVertices.Length <= 0;
+        }
+
+        public void Release()
+        {
+            _meshFilter.sharedMesh.Clear();
+            _meshCollider.sharedMesh.Clear();
+            Destroy(gameObject);
         }
     }
 }

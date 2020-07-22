@@ -28,5 +28,9 @@ namespace VoxelTerrains.Model
             }
             return buffer;
         }
+
+        public Chunk this[Vector3Int chunkIndex] {
+            get => _world[chunkIndex];
+        }
     }
 }
