@@ -97,8 +97,7 @@ namespace VoxelTerrains.Renderer
 
         public void Release()
         {
-            _meshFilter.sharedMesh.Clear();
-            _meshCollider.sharedMesh.Clear();
+            Destroy(_meshFilter);
             Destroy(gameObject);
         }
     }

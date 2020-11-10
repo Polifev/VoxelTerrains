@@ -1,11 +1,8 @@
-﻿using System;
-using UnityEngine;
-
-namespace VoxelTerrains
+﻿namespace VoxelTerrains
 {
     public class Chunk
     {
-        public static int SIZE = 64;
+        public static readonly int SIZE = 64;
         public float[] Data;
 
         public Chunk(float[] data)

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
@@ -60,6 +61,16 @@ namespace VoxelTerrains
                     _agentRenderingCoroutines[i] = StartCoroutine(SpawnRenderersCoroutine(chunkIndex));
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var r in _renderers.Values)
+            {
+                r.GetComponent<ChunkRenderer>().Release();
+            }
+            Resources.UnloadUnusedAssets();
+            GC.Collect();
         }
 
         private IEnumerator SpawnRenderersCoroutine(Vector3Int chunkIndex)

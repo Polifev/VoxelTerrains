@@ -4,6 +4,8 @@ namespace VoxelTerrains.Model
 {
     public class WorldGenerator
     {
+        private static readonly int THREAD_GROUP_SIZE = 8;
+
         public ComputeShader GeneratorShader { get; set; }
 
         public Chunk GenerateChunk(Vector3Int chunkIndex)
@@ -14,7 +16,7 @@ namespace VoxelTerrains.Model
 
             GeneratorShader.SetBuffer(0, "chunk", chunkBuffer);
             GeneratorShader.SetVector("chunkPosition", (Vector3)chunkIndex * (Chunk.SIZE - 1));
-            GeneratorShader.Dispatch(0, 8, 8, 8);
+            GeneratorShader.Dispatch(0, THREAD_GROUP_SIZE, THREAD_GROUP_SIZE, THREAD_GROUP_SIZE);
 
             var data = new float[bufferSize];
             chunkBuffer.GetData(data);
