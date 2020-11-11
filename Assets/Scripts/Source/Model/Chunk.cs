@@ -1,4 +1,4 @@
-﻿namespace VoxelTerrains
+﻿namespace VoxelTerrains.Model
 {
     public class Chunk
     {
