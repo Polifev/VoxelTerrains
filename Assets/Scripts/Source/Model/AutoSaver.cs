@@ -10,15 +10,19 @@ namespace VoxelTerrains.Model
 {
     public class AutoSaver
     {
-        private static AutoSaver _instance;
-        public static AutoSaver Instance { get => _instance ??= new AutoSaver(); }
+        private static AutoSaver _instance = new AutoSaver();
+        public static AutoSaver Instance { get => _instance; }
 
-        public ConcurrentBag<Chunk> Issou;
-        public ConcurrentQueue<Chunk> ChunksToSave { get; private set; }
+        public IChunkRepository ChunkRepository { get; set; }
+        public ConcurrentQueue<LocatedChunk> ChunksToSave { get; private set; } = new ConcurrentQueue<LocatedChunk>();
         private Thread _thread;
 
         public void Start()
         {
+            if(ChunkRepository == null)
+            {
+                throw new NullReferenceException("ChunkRepository cannot be null");
+            }
             _thread = new Thread(Run);
             _thread.Start();
         }
@@ -30,7 +34,7 @@ namespace VoxelTerrains.Model
 
         private void Run()
         {
-            Chunk c;
+            LocatedChunk c;
             do
             {
                 bool empty = !ChunksToSave.TryDequeue(out c);
@@ -40,7 +44,7 @@ namespace VoxelTerrains.Model
                 }
                 else
                 {
-                    // TODO store chunk in repository
+                    ChunkRepository.SaveChunk(c.ChunkIndex, c.Chunk);
                 }
             } while (c != null);
         }

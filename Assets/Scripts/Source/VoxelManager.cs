@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Windows;
 using VoxelTerrains.Model;
 using VoxelTerrains.Renderer;
 
@@ -25,6 +27,7 @@ namespace VoxelTerrains
         private int _agentsSpiralHalfHeight = 2;
 
         private WorldGenerator _worldGenerator = null;
+        private IChunkRepository _chunkRepository = null;
         private ChunkProvider _world = null;
         private Dictionary<Vector3Int, GameObject> _renderers = new Dictionary<Vector3Int, GameObject>();
         private Coroutine[] _agentRenderingCoroutines = null;
@@ -34,7 +37,11 @@ namespace VoxelTerrains
         {
             _worldGenerator = new WorldGenerator();
             _worldGenerator.GeneratorShader = _generatorShader;
-            _world = new ChunkProvider(_worldGenerator);
+            
+            _chunkRepository = new FileSystemChunkRepository(Path.Combine(UnityEngine.Windows.Directory.localFolder, "save", "chunks"));
+            AutoSaver.Instance.ChunkRepository = _chunkRepository;
+            
+            _world = new ChunkProvider(_worldGenerator, _chunkRepository);
 
             // Start a coroutine that will show progressively the terrain to each agent
             _agentRenderingCoroutines = new Coroutine[_voxelAgents.Length];
@@ -45,7 +52,10 @@ namespace VoxelTerrains
                 var chunkIndex = Util.GetChunkIndex(agent.position, Vector3Int.one * Chunk.SIZE);
                 _agentChunkIndices[i] = chunkIndex;
                 _agentRenderingCoroutines[i] = StartCoroutine(SpawnRenderersCoroutine(chunkIndex));
-            }            
+            }
+
+            // Starts the autosaver
+            AutoSaver.Instance.Start();
         }
 
         private void Update()
@@ -65,6 +75,7 @@ namespace VoxelTerrains
 
         private void OnDestroy()
         {
+            AutoSaver.Instance.Stop();
             foreach (var r in _renderers.Values)
             {
                 r.GetComponent<ChunkRenderer>().Release();
