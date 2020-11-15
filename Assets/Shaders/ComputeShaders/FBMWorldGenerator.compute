@@ -1,0 +1,65 @@
+﻿#pragma kernel CSMain
+#include "Util.compute"
+
+RWStructuredBuffer<float> chunk;
+float3 chunkPosition;
+
+float GetFBM_GetRandom(float2 st)
+{
+	return frac(sin(dot(st.xy, float2(12.9898, 78.233))) * 43758.5453123);
+}
+
+float GetFBM_GetCustomNoise(float useless, float2 st) {
+	float2 i = floor(st);
+	float2 f = frac(st);
+	float a = GetFBM_GetRandom(i);
+	float b = GetFBM_GetRandom(i + float2(1.0, 0.0));
+	float c = GetFBM_GetRandom(i + float2(0.0, 1.0));
+	float d = GetFBM_GetRandom(i + float2(1.0, 1.0));
+	float2 u = f * f*(3.0 - 2.0*f);
+	return lerp(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+}
+
+float GetFBM_Value(float2 pos, float baseRoughness, int octaves, float lacunarity, float persistance, float minValue, float strength)
+{
+	float noiseValue = 0;
+	float frequency = baseRoughness;
+	float amplitude = 1;
+	for (int i = 0; i < octaves; i++)
+	{
+		float v = GetFBM_GetCustomNoise(0, pos * frequency);
+		noiseValue += (v + 1) * 0.5 * amplitude;
+		frequency *= lacunarity;
+		amplitude *= persistance;
+	}
+	noiseValue = max(0, noiseValue - minValue);
+	float finalNoiseValue = noiseValue * strength;
+	if (strength == 0)
+	{
+		finalNoiseValue = 0;
+	}
+	return finalNoiseValue;
+}
+
+float fbm(uint3 id, float3 chunkPosition)
+{
+	float scalePosition = 0.01;
+	float scaleHeight = 0.5;
+
+	float3 pt = (id + chunkPosition) * scalePosition;
+	float2 pt2D = float2(pt.x, pt.z);
+	float height = GetFBM_Value(pt2D, 0.319, 12, 1.793, 0.534, 1.45, 20);
+	if (pt.y < height * scaleHeight)
+	{
+		return 1.0;
+	}
+	return -1.0;
+}
+
+[numthreads(8,8,8)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    uint index = indexFromCoords(id);
+    float value = fbm(id, chunkPosition);
+    chunk[index] = value;
+}

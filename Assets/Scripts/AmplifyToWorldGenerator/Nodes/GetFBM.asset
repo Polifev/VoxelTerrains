@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78b2425a2284af743826c689403a4924, type: 3}
+  m_Name: GetFBM
+  m_EditorClassIdentifier: 
+  m_functionInfo: "// Made with Amplify Shader Editor\n// Available at the Unity
+    Asset Store - http://u3d.as/y3X \n/*ASEBEGIN\nVersion=18000\n-1920;109;1920;1019;1247.678;319.4742;1;True;False\nNode;AmplifyShaderEditor.CustomExpressionNode;1;-882.6505,5.109985;Inherit;False;return
+    frac(sin(dot(st.xy, float2(12.9898, 78.233))) * 43758.5453123)@;1;False;2;True;useless;FLOAT;0;In;;Inherit;False;True;st;FLOAT2;0,0;In;;Inherit;False;GetFBM_GetRandom;False;False;0;2;0;FLOAT;0;False;1;FLOAT2;0,0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;6;-1137,117.5;Inherit;False;2;2;0;FLOAT2;0,0;False;1;FLOAT;0;False;1;FLOAT2;0\nNode;AmplifyShaderEditor.FunctionInput;5;-1274,191.5;Inherit;False;scale;1;1;False;1;0;FLOAT;1;False;1;FLOAT;0\nNode;AmplifyShaderEditor.SimpleMultiplyOpNode;8;-88,257.5;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.CustomExpressionNode;2;-705.8511,5.811035;Inherit;False;\tfloat2
+    i = floor(st)@$\tfloat2 f = frac(st)@$\tfloat a = GetFBM_GetRandom(0,i)@$\tfloat
+    b = GetFBM_GetRandom(0,i + float2(1.0, 0.0))@$\tfloat c = GetFBM_GetRandom(0,i
+    + float2(0.0, 1.0))@$\tfloat d = GetFBM_GetRandom(0,i + float2(1.0, 1.0))@$\tfloat2
+    u = f * f*(3.0 - 2.0*f)@$\treturn lerp(a, b, u.x) + (c - a)* u.y * (1.0 - u.x)
+    + (d - b) * u.x * u.y@;1;False;2;True;useless;FLOAT;0;In;;Inherit;False;True;st;FLOAT2;0,0;In;;Inherit;False;GetFBM_GetCustomNoise;False;False;0;2;0;FLOAT;0;False;1;FLOAT2;0,0;False;1;FLOAT;0\nNode;AmplifyShaderEditor.FunctionInput;4;-1289,113.5;Inherit;False;position;2;0;False;1;0;FLOAT2;0,0;False;1;FLOAT2;0\nNode;AmplifyShaderEditor.FunctionInput;7;-1276,283.5;Inherit;False;height;1;2;False;1;0;FLOAT;1;False;1;FLOAT;0\nNode;AmplifyShaderEditor.CustomExpressionNode;3;-487.498,42.57898;Inherit;False;float
+    noiseValue = 0@$\tfloat frequency = baseRoughness@$\tfloat amplitude = 1@$\tfor
+    (int i = 0@ i < octaves@ i++)$\t{$\t\tfloat v = GetFBM_GetCustomNoise(0, pos
+    * frequency)@$\t\tnoiseValue += (v + 1) * 0.5 * amplitude@$\t\tfrequency *= lacunarity@$\t\tamplitude
+    *= persistance@$\t}$\tnoiseValue = max(0, noiseValue - minValue)@$\tfinalNoiseValue
+    = noiseValue * strength@$\tif (strength == 0)$\t{$\t\tfinalNoiseValue = 0@$\t}$\treturn
+    finalNoiseValue@;1;False;9;False;useless;FLOAT;0;In;;Inherit;False;False;pos;FLOAT2;0,0;In;;Inherit;False;False;baseRoughness;FLOAT;0.319;In;;Inherit;False;False;octaves;INT;12;In;;Inherit;False;False;lacunarity;FLOAT;1.793;In;;Inherit;False;False;persistance;FLOAT;0.534;In;;Inherit;False;False;minValue;FLOAT;1.45;In;;Inherit;False;False;strength;FLOAT;20;In;;Inherit;False;True;finalNoiseValue;FLOAT;0;Out;;Inherit;False;GetFBM;False;False;0;9;0;FLOAT;0;False;1;FLOAT2;0,0;False;2;FLOAT;0.319;False;3;INT;12;False;4;FLOAT;1.793;False;5;FLOAT;0.534;False;6;FLOAT;1.45;False;7;FLOAT;20;False;8;FLOAT;0;False;2;FLOAT;0;FLOAT;9\nNode;AmplifyShaderEditor.FunctionOutput;0;53,256;Inherit;False;True;-1;value;0;False;1;0;FLOAT;0;False;1;FLOAT;0\nWireConnection;1;1;6;0\nWireConnection;6;0;4;0\nWireConnection;6;1;5;0\nWireConnection;8;0;3;0\nWireConnection;8;1;7;0\nWireConnection;2;0;1;0\nWireConnection;3;0;2;0\nWireConnection;3;1;6;0\nWireConnection;0;0;8;0\nASEEND*/\n//CHKSM=A0A8323D7B81519854E48A53714541A23058BD79"
+  m_functionName: 
+  m_description: 
+  m_additionalIncludes:
+    m_additionalIncludes: []
+    m_outsideIncludes: []
+  m_additionalPragmas:
+    m_additionalPragmas: []
+    m_outsidePragmas: []
+  m_additionalDirectives:
+    m_validData: 0
+    m_isDirty: 0
+    m_moduleName: ' Additional Directives'
+    m_independentModule: 1
+    m_additionalDirectives: []
+    m_shaderFunctionDirectives: []
+    m_nativeDirectives: []
+    m_nativeDirectivesIndex: -1
+    m_nativeDirectivesFoldout: 0
+    m_directivesSaveItems: []
+  m_nodeCategory: 3
+  m_customNodeCategory: 
+  m_previewPosition: 0
+  m_hidden: 0
