@@ -24,14 +24,16 @@ namespace VoxelTerrains.Model
             }
             else if (_chunkRepository.HasChunk(chunkIndex))
             {
-                buffer.SetData(_chunkRepository.LoadChunk(chunkIndex).Data);
+                var c = _chunkRepository.LoadChunk(chunkIndex);
+                _world[chunkIndex] = c;
+                buffer.SetData(c.Data);
             }
             else
             {
                 var chunk = _worldGenerator.GenerateChunk(chunkIndex);
                 AutoSaver.Instance.ChunksToSave.Enqueue(new LocatedChunk() {
                     ChunkIndex = chunkIndex,
-                    Chunk = chunk 
+                    Chunk = chunk
                 });
                 buffer.SetData(chunk.Data);
                 _world.Add(chunkIndex, chunk);

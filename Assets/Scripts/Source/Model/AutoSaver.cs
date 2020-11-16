@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace VoxelTerrains.Model
 {
@@ -29,24 +30,31 @@ namespace VoxelTerrains.Model
 
         public void Stop()
         {
-            ChunksToSave.Enqueue(null);
+            _thread.Interrupt();
         }
 
         private void Run()
         {
-            LocatedChunk c;
-            do
+            while (true)
             {
-                bool empty = !ChunksToSave.TryDequeue(out c);
-                if (empty)
+                try
                 {
-                    Thread.Sleep(1000);
+                    var empty = !ChunksToSave.TryDequeue(out var c);
+                    if (!empty)
+                    {
+                        ChunkRepository.SaveChunk(c.ChunkIndex, c.Chunk);
+                    }
+                    else
+                    {
+                        Thread.Sleep(1000);
+                    }
                 }
-                else
+                catch (ThreadInterruptedException e)
                 {
-                    ChunkRepository.SaveChunk(c.ChunkIndex, c.Chunk);
+                    Debug.Log("Autosaver stopped");
+                    break;
                 }
-            } while (c != null);
+            }
         }
     }
 }
