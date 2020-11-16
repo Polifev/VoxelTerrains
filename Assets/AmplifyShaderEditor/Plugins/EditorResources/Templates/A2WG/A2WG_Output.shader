@@ -1,4 +1,4 @@
-Shader /*ase_name*/ "Hidden/Templates/Unlit" /*end*/
+Shader /*ase_name*/ "Hidden/A2WG/A2WG_Output" /*end*/
 {
 	Properties
 	{test

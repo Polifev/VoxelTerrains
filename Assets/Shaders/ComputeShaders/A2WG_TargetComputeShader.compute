@@ -100,32 +100,34 @@ float4 Evaluate(float3 _WorldPosition)
 {
     float4 finalColor;
 				float3 WorldPosition30 = _WorldPosition;
-				float useless1_g2 = 0.0;
-				float2 temp_output_6_0_g2 = ( (WorldPosition30).xz * 0.05 );
-				float2 st1_g2 = temp_output_6_0_g2;
-				float localGetFBM_GetRandom1_g2 = GetFBM_GetRandom( useless1_g2 , st1_g2 );
-				float useless2_g2 = localGetFBM_GetRandom1_g2;
-				float2 st2_g2 = float2( 0,0 );
-				float localGetFBM_GetCustomNoise2_g2 = GetFBM_GetCustomNoise( useless2_g2 , st2_g2 );
-				float useless3_g2 = localGetFBM_GetCustomNoise2_g2;
-				float2 pos3_g2 = temp_output_6_0_g2;
-				float baseRoughness3_g2 = 0.319;
-				int octaves3_g2 = 12;
-				float lacunarity3_g2 = 1.793;
-				float persistance3_g2 = 0.534;
-				float minValue3_g2 = 1.45;
-				float strength3_g2 = 20.0;
-				float finalNoiseValue3_g2 = 0.0;
-				float localGetFBM3_g2 = GetFBM( useless3_g2 , pos3_g2 , baseRoughness3_g2 , octaves3_g2 , lacunarity3_g2 , persistance3_g2 , minValue3_g2 , strength3_g2 , finalNoiseValue3_g2 );
-				float temp_output_200_0 = ( localGetFBM3_g2 * 1.0 );
+				float useless1_g1 = 0.0;
+				float2 temp_output_6_0_g1 = ( (WorldPosition30).xz * 1.0 * 0.1 );
+				float2 st1_g1 = temp_output_6_0_g1;
+				float localGetFBM_GetRandom1_g1 = GetFBM_GetRandom( useless1_g1 , st1_g1 );
+				float useless2_g1 = localGetFBM_GetRandom1_g1;
+				float2 st2_g1 = float2( 0,0 );
+				float localGetFBM_GetCustomNoise2_g1 = GetFBM_GetCustomNoise( useless2_g1 , st2_g1 );
+				float useless3_g1 = localGetFBM_GetCustomNoise2_g1;
+				float2 pos3_g1 = temp_output_6_0_g1;
+				float baseRoughness3_g1 = 0.319;
+				int octaves3_g1 = 12;
+				float lacunarity3_g1 = 1.793;
+				float persistance3_g1 = 0.534;
+				float minValue3_g1 = 1.45;
+				float strength3_g1 = 20.0;
+				float finalNoiseValue3_g1 = 0.0;
+				float localGetFBM3_g1 = GetFBM( useless3_g1 , pos3_g1 , baseRoughness3_g1 , octaves3_g1 , lacunarity3_g1 , persistance3_g1 , minValue3_g1 , strength3_g1 , finalNoiseValue3_g1 );
+				float temp_output_240_0 = ( localGetFBM3_g1 * 1.0 );
 				float simplePerlin3D220 = snoise( ( WorldPosition30 * 0.01 ) );
 				simplePerlin3D220 = simplePerlin3D220*0.5 + 0.5;
 				float lerpResult231 = lerp( -10.0 , -100.0 , simplePerlin3D220);
 				float lerpResult228 = lerp( 1.0 , simplePerlin3D220 , step( (WorldPosition30).y , lerpResult231 ));
-				float4 appendResult80 = (float4(( ( ( step( (WorldPosition30).y , max( pow( temp_output_200_0 , 0.5 ) , pow( temp_output_200_0 , 2.0 ) ) ) * lerpResult228 ) * 2.0 ) - 1.0 ) , 0.0 , 0.0 , 0.0));
+				float temp_output_4_0_g14 = ( step( (WorldPosition30).y , max( pow( temp_output_240_0 , 0.5 ) , pow( temp_output_240_0 , 2.0 ) ) ) * lerpResult228 );
+				float3 break12_g14 = float3( 0,0,0 );
+				float4 appendResult9_g14 = (float4(temp_output_4_0_g14 , break12_g14.x , break12_g14.y , break12_g14.z));
 				
 				
-				finalColor = appendResult80;
+				finalColor = appendResult9_g14;
 				return finalColor;
 
 }

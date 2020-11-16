@@ -46,5 +46,10 @@ namespace AmplifyShaderEditor
 		{
 			AmplifyShaderEditorWindow.CreateConfirmationTemplateShader( "e1de45c0d41f68c41b2cc20c8b9c05ef" );
 		}
+		[MenuItem( "Assets/Create/Amplify Shader/A2WG/A2WG_Output", false, 85 )]
+		public static void ApplyTemplateA2WGA2WG_Output()
+		{
+			AmplifyShaderEditorWindow.CreateConfirmationTemplateShader( "b17768e0209a78541a3e0c83eb02f82d" );
+		}
 	}
 }
